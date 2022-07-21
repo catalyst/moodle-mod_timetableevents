@@ -1,15 +1,84 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/timetableevents/db" VERSION="2022071300" COMMENT="XMLDB file for Moodle mod/timetableevents"
+<XMLDB PATH="mod/timetableevents/db" VERSION="20220721" COMMENT="XMLDB file for Moodle mod/timetableevents"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
     <TABLE NAME="timetableevents" COMMENT="Stores instance-level settings">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="If set, this instance will display events for this course, instead of the one the course module belongs to."/>
+        <FIELD NAME="groupid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="If set, this instance will only display events for this group."/>
+        <FIELD NAME="startdate" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="If set, this instance will show events from this date until enddate, instead of the calculated period."/>
+        <FIELD NAME="enddate" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="If set, this instance will show events from startdate until this date, instead of the calculated period."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+        <KEY NAME="groupid" TYPE="foreign" FIELDS="groupid" REFTABLE="groups" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="timetableevents_course" COMMENT="Course-level settings to define the display of timetable events.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="ID of the course these settings apply to"/>
+        <FIELD NAME="startingtermid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The academic term this course starts on, for calculating section dates from."/>
+        <FIELD NAME="teachingstartdate" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="An optional date to override the start date of the starting term."/>
+        <FIELD NAME="firstsection" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The first section to display events in. The start date calculated from startingtermid and teachingstartdate will apply to this section."/>
+        <FIELD NAME="teachinginverval" TYPE="int" LENGTH="7" NOTNULL="true" SEQUENCE="false" COMMENT="The interval of time that is added on to each section to calculate the period to display events for in that section."/>
+        <FIELD NAME="footertext" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Additional footer text to display after each timetable events instance in this course."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="courseid" TYPE="foreign-unique" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+        <KEY NAME="firstsection" TYPE="foreign-unique" FIELDS="firstsection" REFTABLE="section" REFFIELDS="id"/>
+        <KEY NAME="startingtermid" TYPE="foreign" FIELDS="startingtermid" REFTABLE="timetableevents_term" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="timetableevents_section" COMMENT="Additional metadata for special handling of specific sections.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="sectionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The ID of the section this record applies to"/>
+        <FIELD NAME="excluded" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Should this section be excluded from the timetable sequence? If true, this section will be treated as though no time has passed."/>
+        <FIELD NAME="readingweek" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Should this section be treated as a reading week? If so, it will always be treated as though a single week has passed."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="sectionid" TYPE="foreign-unique" FIELDS="sectionid" REFTABLE="sections" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="timetableevents_group" COMMENT="Start date overrides for specific groups.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="groupid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The group these overrides apply to."/>
+        <FIELD NAME="startingtermid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The academic term this group should take its start date from."/>
+        <FIELD NAME="teachingstartdate" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="An optional override of the teaching start date from the selected starting term."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="groupid" TYPE="foreign-unique" FIELDS="groupid" REFTABLE="groups" REFFIELDS="id"/>
+        <KEY NAME="startingtermid" TYPE="foreign" FIELDS="startingtermid" REFTABLE="timetableevents_term" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="timetableevents_year" COMMENT="Academic year">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Name for this academic year"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="timetableevents_term" COMMENT="Start and end dates for an academic term.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="yearid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The academic year this term falls in"/>
+        <FIELD NAME="startdate" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The start date of this term"/>
+        <FIELD NAME="enddate" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The end date of this term."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="yearid" TYPE="foreign" FIELDS="yearid" REFTABLE="timetableevents_year" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
   </TABLES>
