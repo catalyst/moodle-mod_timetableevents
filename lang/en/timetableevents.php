@@ -25,12 +25,15 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['footertext'] = 'Footer text';
+$string['footertext_desc'] = 'This text will be displayed after each instance of the timetable events module on a course page. Additional text can be added in course settings.';
 $string['invalidcourseshortname'] = 'The course shortname provided did not match any courses.';
 $string['invalidgroupidnumber'] = 'The group idnumber provided did not match any groups.';
 $string['invalidtime'] = 'An invalid time was provided. You must provide a date and time in ISO 8601 format. {$a}';
 $string['invalidtimeend'] = 'The timeend for an event must be after timestart.';
 $string['modulename'] = 'Timetable events';
 $string['pluginname'] = 'Timetable events';
+$string['pluginsettings'] = 'Plugin settings';
 $string['privacy:metadata'] = 'The plugin stores no personal data. All events are stored using the core Calendar API, and all other
         data is anonymous settings.';
 $string['timetableevents:import'] = 'Import timetable events via the web service.';

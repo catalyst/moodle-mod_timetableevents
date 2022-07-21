@@ -29,8 +29,20 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) {
-    $settings = new admin_category('modsettingtimetableeventscat', new lang_string('pluginname', 'mod_timetableevents'));
-    $ADMIN->add('modsettings', $settings);
+    $category = new admin_category('modsettingtimetableeventscat', new lang_string('pluginname', 'mod_timetableevents'));
+    $ADMIN->add('modsettings', $category);
+
+    $settings = new admin_settingpage('mod_timetableevents_settings', new lang_string('pluginsettings', 'mod_timetableevents'));
+    if ($ADMIN->fulltree) {
+        $settings->add(new admin_setting_configtext('mod_timetableevents/footertext',
+                new lang_string('footertext', 'mod_timetableevents'),
+                new lang_string('footertext_desc', 'mod_timetableevents'),
+                '',
+                PARAM_TEXT
+                ));
+    }
+    $ADMIN->add('modsettingtimetableeventscat', $settings);
+
     // If something else (e.g. the theme) has added a page called mod_timetableevents_extra somewhere in the admin tree, move it
     // under the plugin's settings.
     if ($extra = $ADMIN->locate('mod_timetableevents_extra')) {
