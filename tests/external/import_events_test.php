@@ -51,7 +51,7 @@ class import_events_test extends \advanced_testcase {
             'name' => 'Test event 1',
             'courseid' => $this->generated['course']->id,
             'groupid' => $this->generated['group']->id,
-            'eventtype' => import_events::EVENT_TYPE,
+            'eventtype' => 'group',
             'component' => import_events::EVENT_COMPONENT,
             'timestart' => strtotime('1 hour'),
             'location' => '123 Fake Street',
@@ -294,7 +294,7 @@ class import_events_test extends \advanced_testcase {
             'groupid' => $this->generated['group']->id,
             'timestart' => $timestart->getTimestamp(),
             'timeduration' => $timeduration,
-            'eventtype' => import_events::EVENT_TYPE,
+            'eventtype' => 'group',
             'component' => import_events::EVENT_COMPONENT,
             'location' => $args['events'][0]['location']
         ];
@@ -344,7 +344,7 @@ class import_events_test extends \advanced_testcase {
             'groupid' => $newgroup->id,
             'timestart' => $timestart->getTimestamp(),
             'timeduration' => $timeduration,
-            'eventtype' => $this->generated['event']->eventtype,
+            'eventtype' => 'group',
             'component' => $this->generated['event']->component,
             'location' => $args['events'][0]['location'],
         ];
@@ -366,7 +366,7 @@ class import_events_test extends \advanced_testcase {
             'name' => 'Test event 2',
             'courseid' => $this->generated['course']->id,
             'groupid' => $this->generated['group']->id,
-            'eventtype' => import_events::EVENT_TYPE,
+            'eventtype' => 'group',
             'component' => import_events::EVENT_COMPONENT,
             'timestart' => strtotime('2 hours'),
             'location' => '123 Fake Street',
@@ -468,7 +468,7 @@ class import_events_test extends \advanced_testcase {
             'groupid' => $this->generated['group']->id,
             'timestart' => $timestart->getTimestamp(),
             'timeduration' => $timeduration,
-            'eventtype' => import_events::EVENT_TYPE,
+            'eventtype' => 'group',
             'component' => import_events::EVENT_COMPONENT,
             'location' => $args['events'][1]['location'],
         ];

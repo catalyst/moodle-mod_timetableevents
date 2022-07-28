@@ -145,33 +145,34 @@ class import_events extends \external_api {
                 continue;
             }
 
+            // These fields will be updated if the event already exists.
             $calendardata = (object)[
                 'timestart' => $timestart->getTimestamp(),
                 'timeduration' => $timeend->getTimestamp() - $timestart->getTimestamp(),
                 'name' => $event['name'],
                 'courseid' => $courseid,
                 'groupid' => $groupid,
+                'eventtype' => empty($groupid) ? 'course' : 'group',
                 'location' => $event['location']
             ];
 
-             $params = [
-                 'uuid' => $event['idnumber'],
-                 'component' => self::EVENT_COMPONENT,
-                 'eventtype' => self::EVENT_TYPE
-             ];
-             $eventid = $DB->get_field('event', 'id', $params);
+            // These fields uniquely identify the event and will not be changed by a future import.
+            $params = [
+                'uuid' => $event['idnumber'],
+                'component' => self::EVENT_COMPONENT
+            ];
+            $eventid = $DB->get_field('event', 'id', $params);
 
-             if ($eventid) {
-                 $calendarevent = \calendar_event::load($eventid);
-                 $calendarevent->update($calendardata, false);
-                 $updated++;
-             } else {
-                 $calendardata->uuid = $event['idnumber'];
-                 $calendardata->component = self::EVENT_COMPONENT;
-                 $calendardata->eventtype = self::EVENT_TYPE;
-                 \calendar_event::create($calendardata, false);
-                 $created++;
-             }
+            if ($eventid) {
+                $calendarevent = \calendar_event::load($eventid);
+                $calendarevent->update($calendardata, false);
+                $updated++;
+            } else {
+                $calendardata->uuid = $event['idnumber'];
+                $calendardata->component = self::EVENT_COMPONENT;
+                \calendar_event::create($calendardata, false);
+                $created++;
+            }
         }
 
         return ['created' => $created, 'updated' => $updated, 'warnings' => $warnings];

@@ -83,3 +83,14 @@ Feature: Import timetable events
     And I should see "123 Fake St" in the "div[data-event-title='Event 4'] .description" "css_element"
     And I should see "Course 2" in the "div[data-event-title='Event 4'] .description" "css_element"
     And I should not see "Group" in the "div[data-event-title='Event 4'] .description" "css_element"
+
+  Scenario: View as admin
+    Given I log in as "admin"
+    And I am on "Course 1" course homepage
+    When I follow "Calendar"
+    And I press "Month"
+    And I click on "Day" "link"
+    Then I should see "Event 1"
+    And I should see "Event 2"
+    And I should see "Event 3"
+    And I should not see "Event 4"
