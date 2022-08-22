@@ -25,6 +25,33 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['acadyears:inuse'] = 'In use';
+$string['coursesetting:academicyear'] = 'Academic year';
+$string['coursesetting:academicyear:notconfigured'] = 'Academic years have not been set up';
+$string['coursesetting:excludedsections'] = 'Excluded sections';
+$string['coursesetting:firstsection'] = 'First teaching section';
+$string['coursesetting:footertext'] = 'Additional footer text';
+$string['coursesetting:groupoverride'] = '{$a->name} - Starting term: {$a->term}, Teaching start date: {$a->teachingstartdate}';
+$string['coursesetting:groupoverridesoracadyears'] = 'Groups or academic years have not been set up';
+$string['coursesetting:groupoverrides'] = 'Group overrides';
+$string['coursesetting:groupoverride:add'] = 'Add group override';
+$string['coursesetting:groupoverride:term'] = 'Term {$a->termno}';
+$string['coursesetting:groupoverride:notconfigured'] = 'Either groups have not been set up or they have already been overridden';
+$string['coursesetting:settings'] = 'Timetable events settings';
+$string['coursesetting:readingweeks'] = 'Reading weeks';
+$string['coursesetting:teachingstartdate'] = 'Teaching start date';
+$string['coursesetting:teachinginverval'] = 'Teaching interval';
+$string['coursesetting:teachinginverval:daily'] = 'Daily';
+$string['coursesetting:teachinginverval:weekly'] = 'Weekly';
+$string['coursesetting:teachinginverval:fortnightly'] = 'Fortnightly';
+$string['coursesetting:term'] = 'Starting term';
+$string['coursesetting:term:options'] = 'Term {$a->termno} {$a->startdate} - {$a->enddate}';
+$string['modsetting:coursedefaults'] = 'Display events based on course defaults';
+$string['modsetting:coursesearch'] = 'Module';
+$string['modsetting:daterange'] = 'Date range';
+$string['modsetting:groupsearch'] = 'Group';
+$string['modsetting:nogroups'] = 'Groups are not set up for this course';
+$string['modsetting:placeholder'] = 'Start typing to search';
 $string['footertext'] = 'Footer text';
 $string['footertext_desc'] = 'This text will be displayed after each instance of the timetable events module on a course page. Additional text can be added in course settings.';
 $string['invalidcourseshortname'] = 'The course shortname provided did not match any courses.';
@@ -32,8 +59,18 @@ $string['invalidgroupidnumber'] = 'The group idnumber provided did not match any
 $string['invalidtime'] = 'An invalid time was provided. You must provide a date and time in ISO 8601 format. {$a}';
 $string['invalidtimeend'] = 'The timeend for an event must be after timestart.';
 $string['modulename'] = 'Timetable events';
+$string['modulenameplural'] = 'Timetable events';
+$string['pluginadministration'] = 'Timetable events';
 $string['pluginname'] = 'Timetable events';
 $string['pluginsettings'] = 'Plugin settings';
+$string['pluginsettings:acadyears'] = 'Academic years';
+$string['pluginsettings:acadyears:edit'] = 'Timetable events - Edit academic year';
+$string['pluginsettings:acadyears:name'] = 'Name';
+$string['pluginsettings:acadyears:termend'] = 'Term {no} end';
+$string['pluginsettings:acadyears:termstart'] = 'Term {no} start';
+$string['pluginsettings:year'] = 'Year';
+$string['pluginsettings:term'] = 'Term';
 $string['privacy:metadata'] = 'The plugin stores no personal data. All events are stored using the core Calendar API, and all other
         data is anonymous settings.';
+$string['section'] = 'Section';
 $string['timetableevents:import'] = 'Import timetable events via the web service.';

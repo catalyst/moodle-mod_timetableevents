@@ -88,6 +88,7 @@ class import_events extends \external_api {
      * For each event passed, if the idnumber matches the uuid of an existing event, that event will be updated.
      * Otherwise, a new event will be created.
      *
+     * @param array $events Events to be imported
      * @return array
      */
     public static function execute(array $events): array {
@@ -197,9 +198,10 @@ class import_events extends \external_api {
     /**
      * Parse the timestart or timeend string to a DateTime object.
      *
+     * @param string $time
      * @return array Any errors that were produced
      */
-    private static function parse_time($time) : \DateTime {
+    private static function parse_time(string $time) : \DateTime {
         $tz = \core_date::get_server_timezone_object();
         $datetime = \DateTime::createFromFormat(self::DATE_FORMAT, $time, $tz);
         if ($datetime === false) {

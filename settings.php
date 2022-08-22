@@ -26,14 +26,27 @@
  * @var \core\plugininfo\mod $module
  */
 
+use \mod_timetableevents\settings\admin_setting_configacadyear;
+
 defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) {
     $category = new admin_category('modsettingtimetableeventscat', new lang_string('pluginname', 'mod_timetableevents'));
     $ADMIN->add('modsettings', $category);
 
-    $settings = new admin_settingpage('mod_timetableevents_settings', new lang_string('pluginsettings', 'mod_timetableevents'));
+    $settings = new admin_settingpage($section, new lang_string('pluginsettings', 'mod_timetableevents'));
     if ($ADMIN->fulltree) {
+        // Terms.
+        $settings->add(new admin_setting_configacadyear(
+            'mod_timetableevents/acadyears',
+            get_string('pluginsettings:acadyears', 'mod_timetableevents'),
+            null,
+            '',
+            true,
+            false
+        ));
+
+        // Footer text.
         $settings->add(new admin_setting_configtext('mod_timetableevents/footertext',
                 new lang_string('footertext', 'mod_timetableevents'),
                 new lang_string('footertext_desc', 'mod_timetableevents'),

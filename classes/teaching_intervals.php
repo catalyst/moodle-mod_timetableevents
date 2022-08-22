@@ -15,36 +15,39 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Privacy subsystem for mod_timetableevents
+ * Class for data management.
  *
  * @package   mod_timetableevents
  * @copyright 2022 onwards Catalyst IT EU {@link https://catalyst-eu.net}
- * @author    Mark Johnson <mark.johnson@catalyst-eu.net>
+ * @author    Sarah Cotton <sarah.cotton@catalyst-eu.net>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-declare(strict_types=1);
+namespace mod_timetableevents;
 
-namespace mod_timetablevents\privacy;
-
-use core_privacy\local\metadata\null_provider;
 
 /**
- * Privacy subsystem for mod_timetableevents
- *
- * @copyright 2022 onwards Catalyst IT EU {@link https://catalyst-eu.net}
- * @author    Mark Johnson <mark.johnson@catalyst-eu.net>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Class for teaching intervals.
  */
-class provider implements null_provider {
+class teaching_intervals {
+    /**
+     * @var int WEEKLY
+     *
+     * The value for weekly teaching intervals.
+     */
+    const WEEKLY = 0;
 
     /**
-     * Get the language string identifier with the component's language
-     * file to explain why this plugin stores no data.
+     * @var int FORTNIGHTLY
      *
-     * @return  string
+     * The value for fortnightly teaching intervals.
      */
-    public static function get_reason(): string {
-        return 'privacy:metadata';
-    }
+    const FORTNIGHTLY = 1;
+
+    /**
+     * @var int DAILY
+     *
+     * The value for daily teaching intervals.
+     */
+    const DAILY = 2;
 }

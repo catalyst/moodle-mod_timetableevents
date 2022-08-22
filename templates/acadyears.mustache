@@ -1,0 +1,84 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_timetableevents/acadyears
+
+    Template for displaying the location of an event.
+
+    The template optionally takes a "url", in which case the location will be displayed as a link.
+
+    Context variables required for this template:
+    * acadyears array - Academic years.
+        * year string - Name of the academic year
+        * yearid - string ID of the academic year
+        * terms array - Array of terms
+            * termno int - Term number
+            * startdateformatted string - Formatted start date of the term
+            * enddateformatted string - Formatted end date of the terms
+
+    Example context (json):
+    {
+        "acadyears" : {
+            "0" : {
+                "year" : "2021-22",
+                "yearid" : "9",
+                "terms" : {
+                    "0" :  {
+                        "termno" : 1,
+                        "startdateformatted" : "24/08/2021",
+                        "enddateformatted" : "24/09/2021"
+                    }
+                }
+          }
+       }
+    }
+}}
+
+
+<div class="mod_timetableevents-acadyears {{#editable}}editable{{/editable}}">
+    <p>{{#helpicon}}{{>core/help_icon}}{{/helpicon}}{{text}}</p>
+    <table id="mod_timetableevents-acadyears-table" class="generalbox generaltable" style="vertical-align: middle;">
+        <tbody>
+            {{#acadyears}}
+                <tr>
+                    <td>{{year}}</td>
+                    <td>
+                        <table>
+                            {{#terms}}
+                                <tr style="background: none;">
+                                    <td>Term {{termno}} {{startdateformatted}} - {{enddateformatted}}</td>
+                                </tr>
+                            {{/terms}}
+                        </table>
+                    </td>
+                    <td>
+                        <a href="{{globals.config.wwwroot}}/mod/timetableevents/acadyears.php?id={{yearid}}&edit=1">Edit</a>
+                    </td>
+                    <td>
+                        {{#notinuse}}
+                            <a href="{{globals.config.wwwroot}}/mod/timetableevents/delete.php?id={{yearid}}">Delete</a>
+                        {{/notinuse}}
+                        {{#inuse}}
+                            {{#str}} acadyears:inuse, timetableevents{{/str}}
+                        {{/inuse}}
+                    </td>
+                </tr>
+            {{/acadyears}}
+        </tbody>
+    </table>
+    <a href="/mod/timetableevents/acadyears.php" class="btn btn-primary">Add new academic year</a>
+</div>

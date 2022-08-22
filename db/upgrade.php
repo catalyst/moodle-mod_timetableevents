@@ -33,21 +33,29 @@ function xmldb_timetableevents_upgrade(int $oldversion = 0) : bool {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2022072100) {
+    if ($oldversion < 2022081600) {
 
         // Define fields to be added to timetableevents.
         $table = new xmldb_table('timetableevents');
 
         $fields = [
-            new xmldb_field('courseid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'id'),
-            new xmldb_field('groupid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'courseid'),
+            new xmldb_field('course', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'id'),
+            new xmldb_field('courseoverride', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'course'),
+            new xmldb_field('name', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'courseoverride'),
+            new xmldb_field('intro', XMLDB_TYPE_TEXT, null, null, null, null, null, 'name'),
+            new xmldb_field('introformat', XMLDB_TYPE_INTEGER, '4', null, null, null, null, 'intro'),
+            new xmldb_field('groupid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'introformat'),
             new xmldb_field('startdate', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'groupid'),
-            new xmldb_field('enddate', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'startdate')
+            new xmldb_field('enddate', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'startdate'),
+            new xmldb_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'enddate'),
+            new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'usermodified'),
+            new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'timecreated')
         ];
 
         $keys = [
-            new xmldb_key('courseid', XMLDB_KEY_FOREIGN, ['courseid'], 'course', ['id']),
-            new xmldb_key('groupid', XMLDB_KEY_FOREIGN, ['groupid'], 'groups', ['id'])
+            new xmldb_key('course', XMLDB_KEY_FOREIGN, ['course'], 'course', ['id']),
+            new xmldb_key('groupid', XMLDB_KEY_FOREIGN, ['groupid'], 'groups', ['id']),
+            new xmldb_key('usermodified', XMLDB_KEY_FOREIGN, ['usermodified'], 'user', ['id'])
         ];
 
         foreach ($fields as $field) {
@@ -153,7 +161,8 @@ function xmldb_timetableevents_upgrade(int $oldversion = 0) : bool {
             $dbman->create_table($table);
         }
 
-        upgrade_plugin_savepoint(true, 2022072100, 'mod', 'timetableevents');
+        // Timetableevents savepoint reached.
+        upgrade_mod_savepoint(true, 2022081600, 'timetableevents');
     }
 
     return true;

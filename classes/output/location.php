@@ -38,10 +38,16 @@ class location implements \renderable, \templatable {
     private $location;
 
     /**
-     * @param string $url
+     * @var string $url
      */
     private $url;
 
+    /**
+     * Construct this renderable.
+     *
+     * @param string $location The location
+     * @param string $url The url
+     */
     public function __construct(string $location, ?string $url = null) {
         $this->location = $location;
         $this->url = $url;

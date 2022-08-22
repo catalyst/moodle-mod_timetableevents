@@ -26,6 +26,7 @@
 namespace mod_timetableevents\external;
 
 /**
+ * Tests for events import API
  * @covers \mod_timetableevents\external\import_events
  */
 class import_events_test extends \advanced_testcase {

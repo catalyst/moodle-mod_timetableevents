@@ -27,6 +27,14 @@
 
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 
+/**
+ * Steps definitions for the timetableevents module.
+ *
+ * @package   mod_timetableevents
+ * @copyright 2022 onwards Catalyst IT EU {@link https://catalyst-eu.net}
+ * @author    Mark Johnson <mark.johnson@catalyst-eu.net>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class behat_mod_timetableevents extends behat_base {
 
     /**
