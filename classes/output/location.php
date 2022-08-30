@@ -47,6 +47,12 @@ class location implements \renderable, \templatable {
         $this->url = $url;
     }
 
+    /**
+     * Return location and URL for the template.
+     *
+     * @param renderer_base $output
+     * @return array
+     */
     public function export_for_template(renderer_base $output) : array {
         return [
             'location' => $this->location,

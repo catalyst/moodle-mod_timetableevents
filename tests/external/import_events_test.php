@@ -25,15 +25,22 @@
 
 namespace mod_timetableevents\external;
 
-use PhpOffice\PhpSpreadsheet\Calculation\DateTime;
-
 /**
  * @covers \mod_timetableevents\external\import_events
  */
 class import_events_test extends \advanced_testcase {
 
+    /**
+     * @var array Generated entities.
+     */
     private $generated = [];
 
+    /**
+     * Generate a course, group, and timetableevents event.
+     *
+     * @return void
+     * @throws \coding_exception
+     */
     public function setUp() : void {
         global $CFG;
         require_once($CFG->libdir . '/externallib.php');
