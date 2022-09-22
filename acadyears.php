@@ -62,39 +62,12 @@ if ($data = $mform->get_data()) {
 
     if (isset($data->edit) && $data->edit == 1) {
 
-        foreach ($data->termid as $key => $term) {
-            $termobj = new stdClass();
-            $termobj->id = $term;
-            $termobj->yearid = $data->yearid;
-            $termobj->startdate = $data->startdate[$key];
-            $termobj->enddate = $data->enddate[$key];
-
-            $termrecord = $DB->get_record('timetableevents_term', ['id' => $term]);
-
-            if (!$termrecord) {
-                $yearid = $DB->insert_record('timetableevents_term', $termobj);
-            } else {
-                if ($termrecord->startdate != $termobj->startdate || $termrecord->enddate != $termobj->enddate) {
-                    $DB->update_record('timetableevents_term', $termobj);
-                }
-            }
-        }
+        data_manager::update_academic_terms($data);
 
     } else {
 
-        $yearobj = new stdClass();
-        $yearobj->name = $data->name;
-
-        $yearid = $DB->insert_record('timetableevents_year', $yearobj);
-
-        foreach ($data->startdate as $key => $value) {
-            $termobj = new stdClass();
-            $termobj->yearid = $yearid;
-            $termobj->startdate = $value;
-            $termobj->enddate = $data->enddate[$key];
-
-            $DB->insert_record('timetableevents_term', $termobj);
-        }
+        $yearid = data_manager::create_academic_year($data->name);
+        data_manager::create_academic_terms($data, $yearid);
     }
 
     redirect(new moodle_url('/admin/settings.php', array('section' => 'modsettingtimetableevents')));

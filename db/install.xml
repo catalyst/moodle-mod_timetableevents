@@ -39,7 +39,6 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="courseid" TYPE="foreign-unique" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
-        <KEY NAME="firstsection" TYPE="foreign-unique" FIELDS="firstsection" REFTABLE="section" REFFIELDS="id"/>
         <KEY NAME="startingtermid" TYPE="foreign" FIELDS="startingtermid" REFTABLE="timetableevents_term" REFFIELDS="id"/>
       </KEYS>
     </TABLE>

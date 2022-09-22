@@ -43,7 +43,7 @@ class admin_setting_configacadyear extends admin_setting {
      * @return string The HTML element
      */
     public function output_html($data, $query = ''): string {
-        global $OUTPUT, $DB;
+        global $OUTPUT;
 
         $default = $this->get_defaultsetting();
         $terms = data_manager::get_terms();
@@ -73,6 +73,6 @@ class admin_setting_configacadyear extends admin_setting {
      * @return string Always returns ''.
      */
     public function write_setting($data): string {
+        return '';
     }
-
 }

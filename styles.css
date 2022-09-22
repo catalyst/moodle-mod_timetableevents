@@ -1,0 +1,15 @@
+p.mod_timetableevents-admin-content {
+    font-size: small;
+    color: grey;
+    font-style: italic;
+}
+
+.icon.mod_timetableevents_course_icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: -6px;
+}
+
+select[name="mod_timetableevents-select-groups"] {
+    margin-bottom: 10px;
+}

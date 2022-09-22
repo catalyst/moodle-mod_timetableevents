@@ -44,5 +44,13 @@ $functions = [
         'type' => 'write',
         'ajax' => false,
         'capabilities' => 'mod/timetableevents:import'
+    ],
+    'mod_timetableevents_select_groups' => [
+        'classname' => 'mod_timetableevents\\external\\get_groups',
+        'methodname' => 'get_groups',
+        'description' => 'Select groups in a different course',
+        'type' => 'read',
+        'ajax' => true,
+        'capabilities' => 'mod/timetableevents:addinstance'
     ]
 ];

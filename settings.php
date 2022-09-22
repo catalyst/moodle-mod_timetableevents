@@ -27,6 +27,8 @@
  */
 
 use \mod_timetableevents\settings\admin_setting_configacadyear;
+use \mod_timetableevents\settings\admin_setting_configdate;
+use \mod_timetableevents\data_manager;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -46,6 +48,57 @@ if ($hassiteconfig) {
             false
         ));
 
+        $acadyears = data_manager::get_acadyears();
+        $choices = [0 => 'Not selected'];
+        foreach ($acadyears as $acadyear) {
+            $choices[$acadyear->id] = $acadyear->name;
+        }
+
+        // Current academic year setting.
+        $settings->add(new admin_setting_configselect('mod_timetableevents/currentacadyear',
+                new lang_string('pluginsettings:currentacadyear', 'mod_timetableevents'),
+                new lang_string('pluginsettings:currentacadyear_desc', 'mod_timetableevents'),
+                '',
+                $choices
+        ));
+
+        // First teaching section.
+        $settings->add(new admin_setting_configtext('mod_timetableevents/firstteachingsection',
+                new lang_string('pluginsettings:firstteachingsection', 'mod_timetableevents'),
+                new lang_string('pluginsettings:firstteachingsection_desc', 'mod_timetableevents'),
+                '5'
+        ));
+
+        // Current academic year setting.
+        $settings->add(new admin_setting_configselect('mod_timetableevents/currentacadyear',
+            new lang_string('pluginsettings:currentacadyear', 'mod_timetableevents'),
+            new lang_string('pluginsettings:currentacadyear_desc', 'mod_timetableevents'),
+            '',
+            $choices
+        ));
+
+        // Teaching start date.
+        $settings->add(new admin_setting_configdate('mod_timetableevents/teachingstartdate',
+            new lang_string('pluginsettings:teachingstartdate', 'mod_timetableevents'),
+            new lang_string('pluginsettings:teachingstartdate_desc', 'mod_timetableevents'),
+            ''
+        ));
+
+        $refl = new ReflectionClass('mod_timetableevents\teaching_intervals');
+        $teachingintervals = $refl->getConstants();
+        $choices = [];
+        foreach ($teachingintervals as $key => $teachinginterval) {
+            $choices[$teachinginterval] = ucwords(strtolower($key));
+        }
+
+        // Current academic year setting.
+        $settings->add(new admin_setting_configselect('mod_timetableevents/teachinginterval',
+            new lang_string('pluginsettings:teachinginterval', 'mod_timetableevents'),
+            new lang_string('pluginsettings:teachinginterval_desc', 'mod_timetableevents'),
+            \mod_timetableevents\teaching_intervals::FORTNIGHTLY,
+            $choices
+        ));
+
         // Footer text.
         $settings->add(new admin_setting_configtext('mod_timetableevents/footertext',
                 new lang_string('footertext', 'mod_timetableevents'),
@@ -54,6 +107,7 @@ if ($hassiteconfig) {
                 PARAM_TEXT
                 ));
     }
+
     $ADMIN->add('modsettingtimetableeventscat', $settings);
 
     // If something else (e.g. the theme) has added a page called mod_timetableevents_extra somewhere in the admin tree, move it

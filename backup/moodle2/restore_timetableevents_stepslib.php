@@ -33,24 +33,26 @@ class restore_timetableevents_activity_structure_step extends restore_activity_s
      * List of elements that can be restored.
      * @return array
      */
-    protected function define_structure() :array {
+    protected function define_structure() {
 
         $paths = [];
         $paths[] = new restore_path_element('timetableevents', '/activity/timetableevents');
 
         // Return the paths wrapped into standard activity structure.
-        return $this->prepare_activity_structure($paths);
+        $return = $this->prepare_activity_structure($paths);
+        return $return;
     }
 
     /**
      * Process timetablevent information.
      * @param array $data information
      */
-    protected function process_timetableevents(array $data) : array {
+    protected function process_timetableevents(array $data) {
         global $DB, $USER;
 
         $data = (object)$data;
         $data->course = $this->get_courseid();
+        $data->courseoverride = null;
 
         // Insert the timetableevents record.
         $time = new DateTime("now", core_date::get_server_timezone_object());
@@ -59,6 +61,7 @@ class restore_timetableevents_activity_structure_step extends restore_activity_s
         $data->timemodified = $time->getTimestamp();
 
         $newitemid = $DB->insert_record('timetableevents', $data);
+        \mod_timetableevents\data_manager::set_course_defaults((array) $data);
         // Immediately after inserting "activity" record, call this.
         $this->apply_activity_instance($newitemid);
     }

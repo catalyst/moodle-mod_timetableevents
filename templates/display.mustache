@@ -1,0 +1,98 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_timetableevents/display
+
+    Template for displaying the timetable event instance on a course page.
+
+    Context variables required for this template:
+    * courseid int - Course ID
+    * cm - cm_info Course module info
+    * siteconfig - array Site settings
+    * courseconfig - object Course settings
+    * daterange - array Array of dates
+        * groups - array
+            * group - Group data
+    * icon - string The module icon
+    * editor - int Check if we should add the select element
+    * select - string Dropdown element
+    * events array - Array of events
+        * name string - Event name
+        * location string - The location
+        * timestart string - Event start date/time
+        * timeend string - Event end time
+    * footertext - string Custom footer text
+    * noevents - int Check if there are any events to show
+    * footertextadmin - string Admin footer text
+
+    Example context (json):
+    {
+        "courseid" : "1",
+        "cm" : {},
+        "siteconfig" : {},
+        "courseconfig" : {},
+        "daterange" : {
+            "123" : {
+                "start" : "2022/10/31, 00:00",
+                "end" : "2022/11/13, 23:59"
+            }
+        },
+        "icon" : "<img src='/theme/image.php/fordson/mod_timetableevents/1669215748/course' />",
+        "editor" : "1",
+        "select" : "<select></select>",
+        "events" : {
+            "0" :  {
+                "name" : 1,
+                "location" : "24/08/2021",
+                "timestart" : "24/08/2021 17:00",
+                "timeend" : "18:00"
+            }
+        },
+        "footertext" : "Custom footer text",
+        "noevents" : "1",
+        "footertextadmin" : "Admin footer text"
+    }
+}}
+
+
+<div class="mod_timetableevents">
+    <div style="width: 100%">
+        <div id="mod_timetableevents-title"><h2>{{{icon}}}{{#str}} pluginname, timetableevents{{/str}}</h2></div>
+
+        {{#editor}}
+                {{{select}}} <br>
+        {{/editor}}
+    </div>
+
+        <div id="mod_timetableevents-content" style="width: 100%">
+        {{#events}}
+            <p>
+                {{name}} {{{location}}}<br>
+                <strong>{{timestart}} - {{timeend}}</strong>
+            </p><hr>
+        {{/events}}
+
+        {{#noevents}}
+            No events
+        {{/noevents}}
+
+            <p>{{footertext}}</p>
+        {{#footertextadmin}}
+                <p class="mod_timetableevents-admin-content">{{footertextadmin}}</p>
+        {{/footertextadmin}}
+    </div>
+</div>

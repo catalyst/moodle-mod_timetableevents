@@ -165,5 +165,18 @@ function xmldb_timetableevents_upgrade(int $oldversion = 0) : bool {
         upgrade_mod_savepoint(true, 2022081600, 'timetableevents');
     }
 
+    if ($oldversion < 2022102100) {
+
+        // Define key firstsection (foreign-unique) to be dropped form timetableevents_course.
+        $table = new xmldb_table('timetableevents_course');
+        $key = new xmldb_key('firstsection', XMLDB_KEY_FOREIGN_UNIQUE, ['firstsection'], 'section', ['id']);
+
+        // Launch drop key firstsection.
+        $dbman->drop_key($table, $key);
+
+        // Timetableevents savepoint reached.
+        upgrade_mod_savepoint(true, 2022102100, 'timetableevents');
+    }
+
     return true;
 }

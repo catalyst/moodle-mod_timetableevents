@@ -177,6 +177,7 @@ class import_events extends \external_api {
                 \calendar_event::create($calendardata, false);
                 $created++;
             }
+
         }
 
         return ['created' => $created, 'updated' => $updated, 'warnings' => $warnings];

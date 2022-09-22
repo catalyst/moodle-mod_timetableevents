@@ -42,4 +42,16 @@ class renderer extends \plugin_renderer_base {
     public function render_location(\templatable $location) : string {
         return $this->render_from_template('mod_timetableevents/location', $location->export_for_template($this->output));
     }
+
+    /**
+     * Basic renderer for the display templatable.
+     *
+     * This is just the default behaviour for templatables passed to render(), but defining it here allows it to be overridden.
+     * @param \templatable $display
+     * @return string
+     * @throws \moodle_exception
+     */
+    public function render_display(\templatable $display) : string {
+        return $this->render_from_template('mod_timetableevents/display', $display->export_for_template($this->output));
+    }
 }

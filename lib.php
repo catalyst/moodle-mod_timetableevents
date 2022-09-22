@@ -23,6 +23,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_timetableevents\data_manager;
+
 /**
  * Add activity instance
  * @param stdClass $timetableevent Module instance
@@ -38,7 +40,7 @@ function timetableevents_add_instance(stdClass $timetableevent) : int {
         $timetableevent->timecreated = time();
     }
 
-    $timetableevent = \mod_timetableevents\data_manager::override_values($timetableevent);
+    $timetableevent = data_manager::override_values($timetableevent);
 
     $id = $DB->insert_record('timetableevents', $timetableevent);
 
@@ -46,7 +48,7 @@ function timetableevents_add_instance(stdClass $timetableevent) : int {
 }
 
 /**
- * Add activity instance
+ * Update activity instance
  * @param stdClass $timetableevent Module instance
  * @return bool
  */
@@ -55,11 +57,8 @@ function timetableevents_update_instance(stdClass $timetableevent) : bool {
 
     $timetableevent->timemodified = time();
     $timetableevent->id = $timetableevent->instance;
-    if (!isset($timetableevent->groupid)) {
-        $timetableevent->groupid = null;
-    }
 
-    $timetableevent = \mod_timetableevents\data_manager::override_values($timetableevent);
+    $timetableevent = data_manager::override_values($timetableevent);
 
     $completiontimeexpected = !empty($timetableevent->completionexpected) ? $timetableevent->completionexpected : null;
     \core_completion\api::update_completion_date_event(
@@ -103,9 +102,12 @@ function timetableevents_supports(string $feature) : ?bool {
             FEATURE_GROUPINGS:
             return false;
         case FEATURE_MOD_INTRO:
-            return false;
+            return true;
         case
             FEATURE_COMPLETION_TRACKS_VIEWS:
+            return false;
+        case
+            FEATURE_COMPLETION_HAS_RULES:
             return false;
         case
             FEATURE_GRADE_HAS_GRADE:
@@ -136,7 +138,7 @@ function timetableevents_supports(string $feature) : ?bool {
  * @param context         $context    The context of the course
  * @return void
  */
-function mod_timetableevents_extend_navigation_course(navigation_node $navigation, stdClass $course, context $context) : void {
+function timetableevents_extend_navigation_course(navigation_node $navigation, stdClass $course, context $context) : void {
     if (has_capability('moodle/course:manageactivities', $context)) {
         $url = new moodle_url('/mod/timetableevents/course.php', array('id' => $course->id));
         $navigation->add(
@@ -148,4 +150,75 @@ function mod_timetableevents_extend_navigation_course(navigation_node $navigatio
             new pix_icon('icon', '', 'mod_timetableevents')
         );
     }
+}
+
+/**
+ * Display instance content.
+ *
+ * @param cm_info $cm
+ */
+function timetableevents_cm_info_view(cm_info $cm) {
+    global $PAGE;
+    $courseid = $cm->get_course()->id;
+    $cminfo = get_fast_modinfo($courseid);
+    $daterange = $cminfo->get_cm($cm->id)->customdata;
+
+    $siteconfig = data_manager::get_site_config();
+    $courseconfig = data_manager::get_course_config($courseid);
+
+    $display = new \mod_timetableevents\output\display($courseid, $cm, $siteconfig, $courseconfig, $daterange);
+    $renderer = $PAGE->get_renderer('mod_timetableevents');
+    $cm->set_content($renderer->render($display));
+}
+
+/**
+ * Sets dynamic information about a course module
+ *
+ * This function is called from cm_info when displaying the module
+ *
+ * @param cm_info $cm
+ */
+function timetableevents_cm_info_dynamic(cm_info $cm) {
+        $cm->set_no_view_link();
+        $cm->set_name(null);
+}
+
+/**
+ * Add a get_coursemodule_info function so we can cache the date ranges for each instance.
+ *
+ * @param stdClass $cm The coursemodule object.
+ * @return cached_cm_info An object with cached cm info.
+ */
+function timetableevents_get_coursemodule_info(stdClass $cm): cached_cm_info {
+    // This method is only called if the cache has been cleared or not been previously set,
+    // so we can just calculate and store the date ranges.
+    global $DB;
+
+    // Get the module instance.
+    $instance = $DB->get_record('timetableevents', ['id' => $cm->instance]);
+
+    // Get the course config.
+    $courseconfig = \mod_timetableevents\data_manager::get_course_config($cm->course);
+    $info = new cached_cm_info();
+    $dateranges = [];
+
+    if (isset($instance->courseoverride) && $instance->courseoverride != null) {
+        $othergroups = data_manager::get_other_course_groups($instance->courseoverride);
+    }
+
+    // Create date range cache for all groups.
+    $groups = groups_get_all_groups($cm->course);
+    if (isset($othergroups)) {
+        $groups = array_merge($groups, $othergroups);
+    }
+    foreach ($groups as $group) {
+        $dateranges[$group->id] = data_manager::calculate_date_range($cm, $instance, $courseconfig, $group->id);
+    }
+
+    // Create a default date range for users in no groups and course events.
+    $group = 0;
+    $dateranges[0] = data_manager::calculate_date_range($cm, $instance, $courseconfig, $group);
+    $info->customdata = $dateranges;
+    return $info;
+
 }

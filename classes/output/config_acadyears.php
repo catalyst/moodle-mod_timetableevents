@@ -41,9 +41,9 @@ class config_acadyears implements \renderable, \templatable {
     /**
      * Construct this renderable.
      *
-     * @param string $id The form ID
-     * @param string $name The form name
-     * @param array $terms The configured terms
+     * @param string $id The form ID.
+     * @param string $name The form name.
+     * @param array $terms The configured terms.
      */
     public function __construct(string $id, string $name, array $terms) {
         $this->context = [
@@ -84,18 +84,10 @@ class config_acadyears implements \renderable, \templatable {
      * Return context for the template.
      *
      * @param renderer_base $output
-     * @return array
-     */
-    public function export_for_template(renderer_base $output) : array {
-        return $this->context;
-    }
-
-    /**
-     * Return acadyears context.
      *
      * @return array
      */
-    public function get_acadyears() : array {
+    public function export_for_template(renderer_base $output) : array {
         return $this->context;
     }
 }

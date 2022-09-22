@@ -21,7 +21,7 @@
  * @author    Sarah Cotton <sarah.cotton@catalyst-eu.net>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define([], function() {
+define(['core/ajax', 'core/str', 'jquery'], function(ajax, str, $) {
 
     return {
         /**
@@ -39,9 +39,6 @@ define([], function() {
             var event = new Event('change', { bubbles: true });
 
             acadyear.addEventListener('change',function(){
-                /* eslint-disable no-console */
-                console.log(terms);
-                /* eslint-enable no-console */
                 const yearid = document.getElementById("id_academicyear").value;
                 const year = terms[yearid];
                 let list = [];
@@ -78,40 +75,46 @@ define([], function() {
 
             });
 
-            group_selections.addEventListener('click',function(e){
-                // Get value of clicked element and add to hidden element
-                // to pass back to the form.
-                let removegroup = e.target.getAttribute('data-value');
-                let removegroupelement = e.target;
-                let removeoverrides = document.querySelector('[name="removeoverrides"]');
-                removeoverrides.value = removeoverrides.value + ',' + removegroup;
+            if (group_selections) {
+                group_selections.addEventListener('click',function(e){
+                    // Get value of clicked element and add to hidden element
+                    // to pass back to the form.
+                    let removegroup = e.target.getAttribute('data-value');
+                    let removegroupelement = e.target;
+                    let removeoverrides = document.querySelector('[name="removeoverrides"]');
+                    removeoverrides.value = removeoverrides.value + ',' + removegroup;
 
-                // Hide element.
-                removegroupelement.style.display = "none";
-            });
+                    // Hide element.
+                    removegroupelement.style.display = "none";
+                });
+            }
 
-            group.addEventListener('click',function(){
+            if (group) {
+                group.addEventListener('click',function(){
 
-                // Save currently set data to Web Storage API.
-                localStorage.setItem('tte_academicyear', document.getElementById('id_academicyear').value);
-                localStorage.setItem('tte_term', document.getElementById('id_term').value);
-                localStorage.setItem('tte_teachingstartdate_day', document.getElementById('id_teachingstartdate_day').value);
-                localStorage.setItem('tte_teachingstartdate_month', document.getElementById('id_teachingstartdate_month').value);
-                localStorage.setItem('tte_teachingstartdate_year', document.getElementById('id_teachingstartdate_year').value);
-                localStorage.setItem('tte_firstsection', document.getElementById('id_firstsection').value);
-                localStorage.setItem('tte_teachinginverval', document.getElementById('id_teachinginverval').value);
+                    // Save currently set data to Web Storage API.
+                    localStorage.setItem('tte_academicyear', document.getElementById('id_academicyear').value);
+                    localStorage.setItem('tte_term', document.getElementById('id_term').value);
+                    localStorage.setItem('tte_teachingstartdate_day', document.getElementById('id_teachingstartdate_day').value);
+                    localStorage.setItem('tte_teachingstartdate_month',
+                        document.getElementById('id_teachingstartdate_month').value);
+                    localStorage.setItem('tte_teachingstartdate_year', document.getElementById('id_teachingstartdate_year').value);
+                    localStorage.setItem('tte_firstsection', document.getElementById('id_firstsection').value);
+                    localStorage.setItem('tte_teachinginverval', document.getElementById('id_teachinginverval').value);
 
-                const readingweek = document.getElementById('id_readingweek');
-                localStorage.setItem('tte_readingweek', Array.from(readingweek.querySelectorAll("option:checked"),v => v.value));
+                    const readingweek = document.getElementById('id_readingweek');
+                    localStorage.setItem('tte_readingweek',
+                        Array.from(readingweek.querySelectorAll("option:checked"),v => v.value));
 
-                const excluded = document.getElementById('id_excluded');
-                localStorage.setItem('tte_excluded', Array.from(excluded.querySelectorAll("option:checked"),v => v.value));
-                localStorage.setItem('tte_footertext', document.getElementById('id_footertext').value);
+                    const excluded = document.getElementById('id_excluded');
+                    localStorage.setItem('tte_excluded', Array.from(excluded.querySelectorAll("option:checked"),v => v.value));
+                    localStorage.setItem('tte_footertext', document.getElementById('id_footertext').value);
 
-                // Redirect user to group overrides settings.
-                let year = document.getElementById('id_academicyear').value;
-                location.href = '/mod/timetableevents/group.php?id=' + course + '&year=' + year + '&sesskey=' + sesskey;
-            });
+                    // Redirect user to group overrides settings.
+                    let year = document.getElementById('id_academicyear').value;
+                    location.href = '/mod/timetableevents/group.php?id=' + course + '&year=' + year + '&sesskey=' + sesskey;
+                });
+            }
 
             // Check if Web Storage data has been set and load if present.
             if (localStorage.getItem('tte_academicyear')) {
@@ -164,6 +167,49 @@ define([], function() {
                 if (!url.includes('/mod/timetableevents/course.php')) {
                     remove_storage_keys();
                 }
+            });
+        },
+
+        instance: function() {
+
+            const courseoverride = document.getElementById('id_courseoverride');
+            const nogroups = str.get_string('modsetting:nogroups', 'timetableevents');
+
+            courseoverride.addEventListener('change',function(){
+
+                let courseid = document.getElementById('id_courseoverride').value;
+
+                let request = {
+                    methodname: 'mod_timetableevents_select_groups',
+                    args: {
+                        courseid: courseid
+                    }
+                };
+
+                let promise = ajax.call([request])[0];
+
+                promise.then(
+                    function(value) {
+                        // Remove current options from select.
+                        const id_groupid = document.getElementById("id_groupid");
+                        id_groupid.options.length = 0;
+
+                        // Replace select options.
+                        if (value.length > 0) {
+                            for (const key in value) {
+                                id_groupid.options[id_groupid.options.length] = new Option(value[key].name, value[key].id);
+                            }
+                            id_groupid.disabled = false;
+                        } else {
+                            $.when(nogroups).done(function(localizednogroups) {
+                                id_groupid.options[id_groupid.options.length] =
+                                    new Option(localizednogroups, 0);
+                            });
+
+                            id_groupid.disabled = true;
+                        }
+                    }
+                );
             });
         }
     };

@@ -81,6 +81,9 @@ if ($data = $mform->get_data()) {
         } else {
             $sectionobj->id = $section->id;
             $result = $DB->update_record('timetableevents_section', $sectionobj);
+
+            // If updating the course settings, delete the course cache.
+            rebuild_course_cache($course->id);
         }
     }
 

@@ -23,38 +23,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('../../config.php');
-
-$id = required_param('id', PARAM_INT);    // Course Module ID.
-$t = optional_param('t', 0, PARAM_INT);     // Timetable event ID.
-
-if ($id) {
-    $PAGE->set_url('/mod/timetableevents/index.php', array('id' => $id));
-    if (!$cm = get_coursemodule_from_id('timetableevents', $id)) {
-        moodle_exception('invalidcoursemodule'); // NOTE this is invalid use of print_error, must be a lang string id.
-    }
-    if (!$course = $DB->get_record('course', array('id' => $cm->course))) {
-        moodle_exception('coursemisconf');  // NOTE As above.
-    }
-    if (!$timetableevent = $DB->get_record('timetableevents', array('id' => $cm->instance))) {
-        moodle_exception('invalidcoursemodule'); // NOTE As above.
-    }
-
-} else {
-    $PAGE->set_url('/mod/timetableevents/index.php', array('t' => $t));
-    if (!$timetableevent = $DB->get_record("timetableevents", array("id" => $t))) {
-        moodle_exception('invalidcoursemodule');
-    }
-    if (!$course = $DB->get_record("course", array("id" => $timetableevent->course)) ) {
-        moodle_exception('coursemisconf');
-    }
-    if (!$cm = get_coursemodule_from_instance("timetableevents", $timetableevent->id, $course->id, true)) {
-        moodle_exception('invalidcoursemodule');
-    }
-}
-
-require_login($course, true, $cm);
-
-$url = course_get_url($course, null, []);
-$url->set_anchor('module-' . $id);
-redirect($url);
+require('../../config.php');
+require_once('lib.php');
+require_login();
+global $DB;
+$id = required_param('id', PARAM_INT);

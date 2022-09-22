@@ -46,7 +46,7 @@ class group_overrides implements \renderable, \templatable {
     public function __construct(int $courseid) {
         global $DB;
         $groupoverrides = $DB->get_records_sql(
-            "SELECT tg.id, g.id AS groupid, tg.startingtermid, tg.teachingstartdate, g.name, tt.yearid
+           "SELECT tg.id, g.id AS groupid, tg.startingtermid, tg.teachingstartdate, g.name, tt.yearid
               FROM {timetableevents_group} tg
               JOIN {timetableevents_term} tt ON tt.id = tg.startingtermid
               JOIN {groups} g ON tg.groupid = g.id

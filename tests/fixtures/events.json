@@ -1,0 +1,222 @@
+[
+  {
+    "name": "12/09/22 17:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1662973200,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 1
+  },
+  {
+    "name": "12/09/22 19:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1662980400,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 2
+  },
+  {
+    "name": "13/09/22 16:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1663056000,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 1
+  },
+  {
+    "name": "13/09/22 17:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1663059600,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 2
+  },
+  {
+    "name": "14/09/22 17:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1663146000,
+    "timeduration": 7200,
+    "uuid": "03e7f866-339c-49e3-996f-2eda0f096057",
+    "location": "345 Fake Street",
+    "group": 1
+  },
+  {
+    "name": "14/09/22 18:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1663149600,
+    "timeduration": 7200,
+    "uuid": "03e7f866-339c-49e3-996f-2eda0f096057",
+    "location": "345 Fake Street",
+    "group": 2
+  },
+  {
+    "name": "15/09/22 16:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1663228800,
+    "timeduration": 7200,
+    "uuid": "03e7f866-339c-49e3-996f-2eda0f096057",
+    "location": "teams:https://www.google.com/",
+    "group": 1
+  },
+  {
+    "name": "15/09/22 17:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1663232400,
+    "timeduration": 7200,
+    "uuid": "03e7f866-339c-49e3-996f-2eda0f096057",
+    "location": "teams:https://www.google.com/",
+    "group": 2
+  },
+  {
+    "name": "16/09/22 17:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1663318800,
+    "timeduration": 7200,
+    "uuid": "03e7f866-339c-49e3-996f-2eda0f096057",
+    "location": "teams:https://www.google.com/",
+    "group": 2
+  },
+  {
+    "name": "20/09/22 17:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1663664400,
+    "timeduration": 7200,
+    "uuid": "03e7f866-339c-49e3-996f-2eda0f096057",
+    "location": "345 Fake Street",
+    "group": 1
+  },
+  {
+    "name": "22/09/22 17:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1663837200,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 2
+  },
+  {
+    "name": "28/09/22 17:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1664355600,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "345 Fake Street",
+    "group": 1
+  },
+  {
+    "name": "01/10/22 18:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1664618400,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 2
+  },
+  {
+    "name": "05/10/22 17:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1664960400,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 1
+  },
+  {
+    "name": "07/10/22 18:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1665136800,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 2
+  },
+  {
+    "name": "12/10/22 17:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1665565200,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 1
+  },
+  {
+    "name": "15/10/22 17:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1665824400,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 2
+  },
+  {
+    "name": "18/10/22 17:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1666083600,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 2
+  },
+  {
+    "name": "24/10/22 17:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1666602000,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 1
+  },
+  {
+    "name": "30/10/22 18:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1667124000,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 2
+  },
+  {
+    "name": "31/10/22 18:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1667210400,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 1
+  },
+  {
+    "name": "03/11/22 18:00",
+    "component": "mod_timetableevents",
+    "eventtype": "group",
+    "timestart": 1667469600,
+    "timeduration": 3600,
+    "uuid": "f02089cd-4f35-488d-8656-0014ea79c801",
+    "location": "teams:https://www.google.com/",
+    "group": 2
+  }
+]

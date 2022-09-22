@@ -15,16 +15,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file for mod_timetableevents
+ * Course administration settings.
  *
  * @package   mod_timetableevents
  * @copyright 2022 onwards Catalyst IT EU {@link https://catalyst-eu.net}
- * @author    Mark Johnson <mark.johnson@catalyst-eu.net>
+ * @author    Sarah Cotton <sarah.cotton@catalyst-eu.net>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+require_once('../../config.php');
 
-/** @var stdClass $plugin */
-$plugin->component = 'mod_timetableevents';
-$plugin->version = 2022112400;
+// No guest autologin.
+require_login(0, false);
+
+$course = required_param('course', PARAM_INT);
+$group = required_param('mod_timetableevents-select-groups', PARAM_INT);
+$sesskey = required_param('sesskey', PARAM_ALPHANUM);
+
+if (!is_null($course)) {
+    require_sesskey();
+    set_user_preference('mod_timetableevents_' . $course , $group);
+    redirect(new moodle_url('/course/view.php', array('id' => $course)));
+}
+

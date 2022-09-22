@@ -49,8 +49,8 @@ class course_settings extends moodleform {
      * Form definition.
      */
     public function definition() {
-        global $PAGE, $OUTPUT;
-        $mform =& $this->_form;
+        global $OUTPUT;
+        $mform = $this->_form;
 
         $mform->disable_form_change_checker();
 
@@ -64,79 +64,89 @@ class course_settings extends moodleform {
                 get_string('coursesetting:academicyear', 'timetableevents'), $acadyearoptions);
             $acadyear = reset($acadyears);
             $mform->setDefault('academicyear', $acadyear->id);
-        } else {
-            $mform->addElement('static', 'academicyear', get_string('coursesetting:academicyear', 'timetableevents'),
-                get_string('coursesetting:academicyear:notconfigured', 'timetableevents'));
-        }
 
-        $this->_customdata['terms'] = data_manager::get_terms();
-        $mform->addElement('hidden', 'termsjson', json_encode((object) $this->_customdata['terms']));
-        $mform->setType('termsjson', PARAM_RAW);
+            $this->_customdata['terms'] = data_manager::get_terms();
+            $mform->addElement('hidden', 'termsjson', json_encode((object) $this->_customdata['terms']));
+            $mform->setType('termsjson', PARAM_RAW);
 
-        $mform->addElement('date_selector', 'teachingstartdate', get_string('coursesetting:teachingstartdate', 'timetableevents'));
-        $groups = groups_get_course_data($this->_customdata['course']->id);
+            $mform->addElement('date_selector', 'teachingstartdate',
+                get_string('coursesetting:teachingstartdate', 'timetableevents'));
+            $groups = groups_get_course_data($this->_customdata['course']->id);
 
-        if ($acadyears && count($groups->groups) > 0) {
-            $groupoverrides = new group_overrides($this->_customdata['course']->id);
+            if ($acadyears && count($groups->groups) > 0) {
+                $groupoverrides = new group_overrides($this->_customdata['course']->id);
 
-            $context = [
-                'labeltext' => get_string('coursesetting:groupoverrides', 'timetableevents'),
-                'multiple' => true,
-                'selectionid' => 'groupoverrides',
-                'items' => $groupoverrides->export_for_template($OUTPUT)
+                $context = [
+                    'labeltext' => get_string('coursesetting:groupoverrides', 'timetableevents'),
+                    'multiple' => true,
+                    'selectionid' => 'groupoverrides',
+                    'items' => $groupoverrides->export_for_template($OUTPUT)
+                ];
+
+                $mform->addElement(
+                    'html',
+                    $OUTPUT->render_from_template('mod_timetableevents/groupoverrides', $context)
+                );
+
+                $groupbuttonattributes['class'] = 'btn';
+                $mform->addElement('button', 'groupoverrides',
+                    get_string('coursesetting:groupoverride:add', 'timetableevents'), null, $groupbuttonattributes);
+            } else {
+                $mform->addElement('static', 'groupoverrides', get_string('coursesetting:groupoverrides', 'timetableevents'),
+                    get_string('coursesetting:groupoverridesoracadyears', 'timetableevents'));
+            }
+
+            // Get course sections.
+            $sections = data_manager::get_course_sections($this->_customdata['course']->id);
+            $sectionoptions = [];
+            $defaultsection = 0;
+            $firstteachingsection = get_config('mod_timetableevents', 'firstteachingsection');
+            foreach ($sections as $section) {
+                $sectionoptions[$section->section] = get_section_name($this->_customdata['course']->id, $section->section);
+                if ($section->section == $firstteachingsection) {
+                    $defaultsection = $section->section;
+                }
+            }
+
+            $mform->addElement('select', 'firstsection',
+                get_string('coursesetting:firstsection', 'timetableevents'), $sectionoptions);
+            $mform->setDefault('firstsection', $defaultsection); // Language string?
+            $mform->setType('firstsection', PARAM_INT);
+
+            $intervaloptions = [
+                teaching_intervals::WEEKLY => get_string('coursesetting:teachinginverval:weekly', 'timetableevents'),
+                teaching_intervals::FORTNIGHTLY => get_string('coursesetting:teachinginverval:fortnightly', 'timetableevents'),
+                teaching_intervals::DAILY => get_string('coursesetting:teachinginverval:daily', 'timetableevents')
             ];
+            $mform->addElement('select', 'teachinginverval',
+                get_string('coursesetting:teachinginverval', 'timetableevents'), $intervaloptions);
 
-            $mform->addElement(
-                'html',
-                $OUTPUT->render_from_template('mod_timetableevents/groupoverrides', $context)
+            $options = array(
+                'multiple' => true,
+                'showsuggestions' => true,
+                'placeholder' => get_string('modsetting:placeholder', 'timetableevents'),
             );
+            $mform->addElement('autocomplete', 'readingweek',
+                get_string('coursesetting:readingweeks', 'timetableevents'), $sectionoptions, $options);
+            $mform->hideIf('readingweek', 'teachinginverval', 'neq', teaching_intervals::FORTNIGHTLY);
 
-            $groupbuttonattributes['class'] = 'btn';
-            $mform->addElement('button', 'groupoverrides',
-                get_string('coursesetting:groupoverride:add', 'timetableevents'), null, $groupbuttonattributes);
+            $mform->addElement('autocomplete', 'excluded',
+                get_string('coursesetting:excludedsections', 'timetableevents'), $sectionoptions, $options);
+
+            $mform->addElement('text', 'footertext',
+                get_string('coursesetting:footertext', 'timetableevents'));
+            $mform->setType('footertext', PARAM_TEXT);
+
+            $mform->addElement('hidden', 'removeoverrides', null);
+            $mform->setType('removeoverrides', PARAM_TEXT);
+
+            $this->add_action_buttons();
+
         } else {
-            $mform->addElement('static', 'groupoverrides', get_string('coursesetting:groupoverrides', 'timetableevents'),
-                get_string('coursesetting:groupoverridesoracadyears', 'timetableevents'));
+            $mform->addElement('static', 'academicyear', '',
+                            get_string('coursesetting:academicyear:notconfigured', 'timetableevents'));
+            $mform->addElement('cancel', 'cancel', get_string('cancel'));
         }
-        // Get course sections.
-        $sections = data_manager::get_course_sections($this->_customdata['course']->id);
-        $sectionoptions = [];
-        foreach ($sections as $section) {
-            $sectionoptions[$section->id] = $section->name;
-        }
-
-        $mform->addElement('select', 'firstsection', get_string('coursesetting:firstsection', 'timetableevents'), $sectionoptions);
-        $mform->setType('firstsection', PARAM_INT);
-
-        $intervaloptions = [
-            teaching_intervals::WEEKLY => get_string('coursesetting:teachinginverval:weekly', 'timetableevents'),
-            teaching_intervals::FORTNIGHTLY => get_string('coursesetting:teachinginverval:fortnightly', 'timetableevents'),
-            teaching_intervals::DAILY => get_string('coursesetting:teachinginverval:daily', 'timetableevents')
-        ];
-        $mform->addElement('select', 'teachinginverval',
-            get_string('coursesetting:teachinginverval', 'timetableevents'), $intervaloptions);
-
-        $options = array(
-            'multiple' => true,
-            'showsuggestions' => true,
-            'placeholder' => get_string('modsetting:placeholder', 'timetableevents'),
-        );
-        $mform->addElement('autocomplete', 'readingweek',
-            get_string('coursesetting:readingweeks', 'timetableevents'), $sectionoptions, $options);
-        $mform->hideIf('readingweek', 'teachinginverval', 'neq', teaching_intervals::FORTNIGHTLY);
-
-        $mform->addElement('autocomplete', 'excluded',
-            get_string('coursesetting:excludedsections', 'timetableevents'), $sectionoptions, $options);
-
-        $mform->addElement('text', 'footertext',
-            get_string('coursesetting:footertext', 'timetableevents'));
-        $mform->setType('footertext', PARAM_TEXT);
-
-        $mform->addElement('hidden', 'removeoverrides', null);
-        $mform->setType('removeoverrides', PARAM_TEXT);
-
-        $this->add_action_buttons();
-
     }
 
     /**
@@ -145,36 +155,35 @@ class course_settings extends moodleform {
     public function definition_after_data() {
         $mform = $this->_form;
         $acadyearel = $mform->getElement('academicyear');
-        $year = $acadyearel->getValue();
 
-        $terms = $this->_customdata['terms'];
+        if ($year = $acadyearel->getValue()) {
 
-        if ($year) {
             $terms = $this->_customdata['terms'][$year[0]];
-        } else {
-            $terms = array_values($terms);
-        }
 
-        if ($terms) {
-            $termoptions = [];
-            foreach ($terms as $term) {
-                $termoptions[$term->termid] = get_string('coursesetting:term:options', 'timetableevents',
-                    [
-                        'termno' => $term->termno,
-                        'startdate' => $term->startdateformatted,
-                        'enddate' => $term->enddateformatted
-                    ]
-                );
+            if ($terms) {
+                $termoptions = [];
+                foreach ($terms as $term) {
+                    $termoptions[$term->termid] = get_string('coursesetting:term:options', 'timetableevents',
+                        [
+                            'termno' => $term->termno,
+                            'startdate' => $term->startdateformatted,
+                            'enddate' => $term->enddateformatted
+                        ]
+                    );
+                }
+
+                $termel = $mform->createElement('select', 'term',
+                    get_string('coursesetting:term', 'timetableevents'), $termoptions);
+                $mform->insertElementBefore($termel, 'teachingstartdate');
+                if (!isset($this->_customdata['data']->teachingstartdate)) {
+                    $mform->setDefault('teachingstartdate', $term->startdate);
+                }
+
+            } else {
+                $termel = $mform->createElement('static', 'term', get_string('coursesetting:term', 'timetableevents'),
+                    get_string('coursesetting:academicyear:notconfigured', 'timetableevents'));
+                $mform->insertElementBefore($termel, 'teachingstartdate');
             }
-
-            $termel = $mform->createElement('select', 'term', get_string('coursesetting:term', 'timetableevents'), $termoptions);
-            $mform->insertElementBefore($termel, 'teachingstartdate');
-            $mform->setDefault('teachingstartdate', $term->startdate);
-
-        } else {
-            $termel = $mform->createElement('static', 'term', get_string('coursesetting:term', 'timetableevents'),
-                get_string('coursesetting:academicyear:notconfigured', 'timetableevents'));
-            $mform->insertElementBefore($termel, 'teachingstartdate');
         }
     }
 }
