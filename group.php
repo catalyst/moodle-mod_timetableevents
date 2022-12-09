@@ -34,10 +34,12 @@ $course = get_course($course);
 
 require_sesskey();
 
-// No guest autologin.
-require_login(0, false);
+global $DB, $USER, $PAGE;
 
-admin_externalpage_setup('managemodules');
+// No guest autologin.
+require_login($course, false);
+$context = \context_course::instance($course->id);
+require_capability('mod/timetableevents:addinstance', $context, $USER->id, true, $errormessage = 'nopermissions');
 
 $pageurl = new moodle_url('/mod/timetableevents/group.php');
 $PAGE->set_url($pageurl);
@@ -52,8 +54,6 @@ $PAGE->set_title($SITE->shortname . ': '  .  get_string('pluginname', 'timetable
 $mform = new group_settings($pageurl, array('year' => $year, 'course' => $course), null, null);
 
 if ($data = $mform->get_data()) {
-
-    global $DB, $USER;
 
     $group = $DB->get_record('timetableevents_group', ['groupid' => $data->groupid]);
 

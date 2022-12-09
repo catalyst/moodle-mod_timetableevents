@@ -32,11 +32,13 @@ use mod_timetableevents\forms\course_settings;
 $course = optional_param('id', null, PARAM_INT);
 $course = get_course($course);
 
+global $DB, $USER, $PAGE;
 // No guest autologin.
-require_login(0, false);
+require_login($course, false);
+$context = \context_course::instance($course->id);
+require_capability('mod/timetableevents:addinstance', $context, $USER->id, true, $errormessage = 'nopermissions');
 
-admin_externalpage_setup('managemodules');
-
+$PAGE->set_pagelayout('incourse');
 $pageurl = new moodle_url('/mod/timetableevents/course.php', ['id' => $course->id]);
 $PAGE->set_url($pageurl);
 
@@ -51,7 +53,6 @@ $saveddata = data_manager::get_course_form_data($course->id);
 $mform = new course_settings($pageurl, array('data' => $saveddata, 'course' => $course), null, null);
 
 if ($data = $mform->get_data()) {
-    global $DB, $USER;
 
     $courserecord = $DB->get_record('timetableevents_course', ['courseid' => $course->id]);
 
