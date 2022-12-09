@@ -39,7 +39,7 @@ global $DB, $USER, $PAGE;
 // No guest autologin.
 require_login($course, false);
 $context = \context_course::instance($course->id);
-require_capability('mod/timetableevents:addinstance', $context, $USER->id, true, $errormessage = 'nopermissions');
+require_capability('mod/timetableevents:addinstance', $context, $USER->id);
 
 $pageurl = new moodle_url('/mod/timetableevents/group.php');
 $PAGE->set_url($pageurl);
