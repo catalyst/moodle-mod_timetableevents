@@ -51,7 +51,7 @@ class display implements \renderable, \templatable {
      */
     public function __construct(int $courseid, cm_info $cm, array $siteconfig,
                                 stdClass $courseconfig, array $daterange) {
-        global $DB, $OUTPUT, $USER;
+        global $DB, $OUTPUT, $USER, $SESSION;
 
         $this->context = [
             'courseid' => $courseid,
@@ -88,8 +88,10 @@ class display implements \renderable, \templatable {
                         foreach ($groupdata->groups as $key => $group) {
                             $options[$key] = $group;
                         }
+
+                        $referrer = $SESSION->fromdiscussion;
                         $url = new \moodle_url('/mod/timetableevents/group_preference.php',
-                            ['course' => $courseid, 'cm' => $cm->id, 'sesskey' => sesskey()]);
+                            ['course' => $courseid, 'cm' => $cm->id, 'sesskey' => sesskey(), 'referrer' => $referrer]);
                         $select = $OUTPUT->single_select($url, 'mod_timetableevents-select-groups',
                             $options, $grouppreference, null, 'mod_timetableevents-select-groups' . $cm->id,
                             ['class' => 'mod_timetableevents-select-groups']);

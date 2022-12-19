@@ -13,3 +13,9 @@ p.mod_timetableevents-admin-content {
 select[name="mod_timetableevents-select-groups"] {
     margin-bottom: 10px;
 }
+
+a[data-title="timetableevents"],
+li.modtype_timetableevents span.inplaceeditable,
+li.modtype_timetableevents img.activityicon {
+    display: none !important;
+}

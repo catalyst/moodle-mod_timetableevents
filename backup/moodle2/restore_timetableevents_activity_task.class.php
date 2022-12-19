@@ -56,7 +56,7 @@ class restore_timetableevents_activity_task extends restore_activity_task {
         $contents = [];
 
         $contents[] = new restore_decode_content('timetableevents',
-            array('courseoverride', 'name', 'intro', 'introformat', 'startdate', 'enddate'), 'timetableevents');
+            array('courseoverride', 'name', 'intro', 'introformat', 'groupid', 'startdate', 'enddate'), 'timetableevents');
 
         return $contents;
     }

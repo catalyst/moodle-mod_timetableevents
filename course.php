@@ -82,9 +82,6 @@ if ($data = $mform->get_data()) {
         } else {
             $sectionobj->id = $section->id;
             $result = $DB->update_record('timetableevents_section', $sectionobj);
-
-            // If updating the course settings, delete the course cache.
-            rebuild_course_cache($course->id);
         }
     }
 
@@ -96,6 +93,9 @@ if ($data = $mform->get_data()) {
             $DB->delete_records('timetableevents_group', ['id' => $override]);
         }
     }
+
+    // If updating the course settings, rebuild the course cache.
+    rebuild_course_cache($course->id);
 
     redirect(new moodle_url('/course/admin.php', array('courseid' => $course->id)));
 

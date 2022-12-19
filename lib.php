@@ -168,7 +168,7 @@ function timetableevents_cm_info_view(cm_info $cm) {
 
     $display = new \mod_timetableevents\output\display($courseid, $cm, $siteconfig, $courseconfig, $daterange);
     $renderer = $PAGE->get_renderer('mod_timetableevents');
-    $cm->set_content($renderer->render($display));
+    $cm->set_content($renderer->render($display), true);
 }
 
 /**
@@ -180,7 +180,7 @@ function timetableevents_cm_info_view(cm_info $cm) {
  */
 function timetableevents_cm_info_dynamic(cm_info $cm) {
         $cm->set_no_view_link();
-        $cm->set_name(null);
+        $cm->set_name("");
 }
 
 /**

@@ -31,10 +31,11 @@ require_login(0, false);
 $course = required_param('course', PARAM_INT);
 $group = required_param('mod_timetableevents-select-groups', PARAM_INT);
 $sesskey = required_param('sesskey', PARAM_ALPHANUM);
+$referrer = required_param('referrer', PARAM_RAW);
 
 if (!is_null($course)) {
     require_sesskey();
     set_user_preference('mod_timetableevents_' . $course , $group);
-    redirect(new moodle_url('/course/view.php', array('id' => $course)));
+    redirect(new moodle_url($referrer));
 }
 

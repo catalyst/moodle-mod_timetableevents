@@ -39,8 +39,7 @@ class restore_timetableevents_activity_structure_step extends restore_activity_s
         $paths[] = new restore_path_element('timetableevents', '/activity/timetableevents');
 
         // Return the paths wrapped into standard activity structure.
-        $return = $this->prepare_activity_structure($paths);
-        return $return;
+        return $this->prepare_activity_structure($paths);
     }
 
     /**
@@ -52,7 +51,6 @@ class restore_timetableevents_activity_structure_step extends restore_activity_s
 
         $data = (object)$data;
         $data->course = $this->get_courseid();
-        $data->courseoverride = null;
 
         // Insert the timetableevents record.
         $time = new DateTime("now", core_date::get_server_timezone_object());

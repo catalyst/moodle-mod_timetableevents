@@ -39,7 +39,7 @@ class backup_timetableevents_activity_structure_step extends backup_activity_str
                                                           'name',
                                                           'intro',
                                                           'introformat',
-                                                          'groupdid',
+                                                          'groupid',
                                                           'startdate',
                                                           'enddate')
                                                     );
@@ -48,7 +48,6 @@ class backup_timetableevents_activity_structure_step extends backup_activity_str
         $timetableevent->set_source_table('timetableevents', array('id' => backup::VAR_ACTIVITYID));
 
         // Return the root element (timetableevents), wrapped into standard activity structure.
-        $return = $this->prepare_activity_structure($timetableevent);
-        return $return;
+        return $this->prepare_activity_structure($timetableevent);
     }
 }
