@@ -501,6 +501,31 @@ class data_manager {
     }
 
     /**
+     * Get all group events.
+     *
+     * @param int $courseid The course id.
+     * @param int $groupid The group id.
+     * @return array
+     */
+    public static function get_all_group_events(int $courseid, int $groupid): array {
+        global $DB;
+
+        $params['courseid'] = $courseid;
+        $params['component'] = 'mod_timetableevents';
+        $params['groupid'] = $groupid;
+        $params['eventtype'] = 'group';
+
+        $eventssql = "SELECT *
+                        FROM {event}
+                       WHERE courseid = :courseid
+                         AND component = :component
+                         AND groupid = :groupid
+                         AND eventtype = :eventtype";
+
+        return $DB->get_records_sql($eventssql, $params);
+    }
+
+    /**
      * Get the user groups and event type.
      *
      * @param cm_info $cm Course module.
@@ -523,11 +548,12 @@ class data_manager {
         }
 
         $allgroups = groups_get_all_groups($courseid);
-        // Remove any groups that a user isn't a member of.
+        // Remove any groups that a user isn't a member of or that don't have any events.
         if (!has_capability('mod/timetableevents:viewall', $context)) {
             $usergroups = groups_get_user_groups($courseid, $USER->id);
             foreach ($allgroups as $group) {
-                if (!in_array($group->id, $usergroups[0])) {
+                $events = data_manager::get_all_group_events($courseid, $group->id);
+                if (!in_array($group->id, $usergroups[0]) || count($events) == 0) {
                     unset($allgroups[$group->id]);
                 }
             }

@@ -120,7 +120,10 @@ class course_settings extends moodleform {
             ];
             $mform->addElement('select', 'teachinginverval',
                 get_string('coursesetting:teachinginverval', 'timetableevents'), $intervaloptions);
-
+            $sectionoptions = [];
+            foreach ($sections as $section) {
+                $sectionoptions[$section->sectionid] = get_section_name($this->_customdata['course']->id, $section->section);
+            }
             $options = array(
                 'multiple' => true,
                 'showsuggestions' => true,
