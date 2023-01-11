@@ -19,3 +19,7 @@ li.modtype_timetableevents span.inplaceeditable,
 li.modtype_timetableevents img.activityicon {
     display: none !important;
 }
+
+#groupoverrides_selections .badge span {
+    display: none;
+}
