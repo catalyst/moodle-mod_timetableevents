@@ -64,6 +64,7 @@ class course_settings extends moodleform {
                 get_string('coursesetting:academicyear', 'timetableevents'), $acadyearoptions);
             $acadyear = reset($acadyears);
             $mform->setDefault('academicyear', $acadyear->id);
+            $mform->addHelpButton('academicyear', 'coursesetting:academicyear', 'timetableevents');
 
             $this->_customdata['terms'] = data_manager::get_terms();
             $mform->addElement('hidden', 'termsjson', json_encode((object) $this->_customdata['terms']));
@@ -71,6 +72,8 @@ class course_settings extends moodleform {
 
             $mform->addElement('date_selector', 'teachingstartdate',
                 get_string('coursesetting:teachingstartdate', 'timetableevents'));
+            $mform->addHelpButton('teachingstartdate', 'coursesetting:teachingstartdate', 'timetableevents');
+
             $groups = groups_get_course_data($this->_customdata['course']->id);
 
             if ($acadyears && count($groups->groups) > 0) {
@@ -95,6 +98,7 @@ class course_settings extends moodleform {
                 $mform->addElement('static', 'groupoverrides', get_string('coursesetting:groupoverrides', 'timetableevents'),
                     get_string('coursesetting:groupoverridesoracadyears', 'timetableevents'));
             }
+            $mform->addHelpButton('groupoverrides', 'coursesetting:groupoverridesoracadyears', 'timetableevents');
 
             // Get course sections.
             $sections = data_manager::get_course_sections($this->_customdata['course']->id);
@@ -112,6 +116,7 @@ class course_settings extends moodleform {
                 get_string('coursesetting:firstsection', 'timetableevents'), $sectionoptions);
             $mform->setDefault('firstsection', $defaultsection); // Language string?
             $mform->setType('firstsection', PARAM_INT);
+            $mform->addHelpButton('firstsection', 'coursesetting:firstsection', 'timetableevents');
 
             $intervaloptions = [
                 teaching_intervals::WEEKLY => get_string('coursesetting:teachinginverval:weekly', 'timetableevents'),
@@ -120,6 +125,8 @@ class course_settings extends moodleform {
             ];
             $mform->addElement('select', 'teachinginverval',
                 get_string('coursesetting:teachinginverval', 'timetableevents'), $intervaloptions);
+            $mform->addHelpButton('teachinginverval', 'coursesetting:teachinginverval', 'timetableevents');
+
             $sectionoptions = [];
             foreach ($sections as $section) {
                 $sectionoptions[$section->sectionid] = get_section_name($this->_customdata['course']->id, $section->section);
@@ -132,13 +139,16 @@ class course_settings extends moodleform {
             $mform->addElement('autocomplete', 'readingweek',
                 get_string('coursesetting:readingweeks', 'timetableevents'), $sectionoptions, $options);
             $mform->hideIf('readingweek', 'teachinginverval', 'neq', teaching_intervals::FORTNIGHTLY);
+            $mform->addHelpButton('readingweek', 'coursesetting:readingweeks', 'timetableevents');
 
             $mform->addElement('autocomplete', 'excluded',
                 get_string('coursesetting:excludedsections', 'timetableevents'), $sectionoptions, $options);
+            $mform->addHelpButton('excluded', 'coursesetting:excludedsections', 'timetableevents');
 
             $mform->addElement('text', 'footertext',
                 get_string('coursesetting:footertext', 'timetableevents'));
             $mform->setType('footertext', PARAM_TEXT);
+            $mform->addHelpButton('footertext', 'coursesetting:footertext', 'timetableevents');
 
             $mform->addElement('hidden', 'removeoverrides', null);
             $mform->setType('removeoverrides', PARAM_TEXT);
@@ -187,6 +197,7 @@ class course_settings extends moodleform {
                     get_string('coursesetting:academicyear:notconfigured', 'timetableevents'));
                 $mform->insertElementBefore($termel, 'teachingstartdate');
             }
+            $mform->addHelpButton('term', 'coursesetting:term', 'timetableevents');
         }
     }
 }

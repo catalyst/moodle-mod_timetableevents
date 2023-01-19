@@ -59,6 +59,7 @@ class group_settings extends moodleform {
             }
             $mform->addElement('select', 'groupid',
                 get_string('coursesetting:groupoverrides', 'timetableevents'), $groupoptions);
+            $mform->addHelpButton('groupid', 'coursesetting:groupoverrides', 'timetableevents');
 
             $terms = data_manager::get_terms($this->_customdata['year']);
             if ($terms) {
@@ -67,19 +68,20 @@ class group_settings extends moodleform {
                     $termoptions[$term->termid] = $term->termname;
                 }
 
-                $mform->addElement('select', 'startingtermid', get_string('coursesetting:term', 'timetableevents'), $termoptions);
+                $mform->addElement('select', 'startingtermid', get_string('coursesetting:term:group', 'timetableevents'), $termoptions);
+                $mform->addHelpButton('startingtermid', 'coursesetting:term:group', 'timetableevents');
             } else {
                 $mform->addElement('static', 'academicyear', get_string('coursesetting:academicyear', 'timetableevents'),
                     get_string('coursesetting:academicyear:notconfigured', 'timetableevents'));
             }
 
             $mform->addElement('date_selector', 'teachingstartdate',
-                get_string('coursesetting:teachingstartdate', 'timetableevents'));
+                get_string('coursesetting:teachingstartdate:group', 'timetableevents'));
 
             // Reset keys so we can set the date from the first element in the terms array.
             $termoptions = array_keys($termoptions);
             $mform->setDefault('teachingstartdate', $terms[$this->_customdata['year']][$termoptions[0]]->startdate);
-
+            $mform->addHelpButton('teachingstartdate', 'coursesetting:teachingstartdate:group', 'timetableevents');
             $this->add_action_buttons();
         } else {
             $mform->addElement('static', 'groupid', get_string('coursesetting:groupoverrides', 'timetableevents'),

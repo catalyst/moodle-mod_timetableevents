@@ -52,6 +52,7 @@ class mod_timetableevents_mod_form extends moodleform_mod {
         // Defaults toggle.
         $mform->addElement('checkbox', 'coursedefaults', get_string('modsetting:coursedefaults', 'timetableevents'));
         $mform->setDefault('coursedefaults', 1);
+        $mform->addHelpButton('coursedefaults', 'modsetting:coursedefaults', 'timetableevents');
 
         // Course selector.
         $courses = get_courses("all", "c.fullname ASC");
@@ -68,6 +69,7 @@ class mod_timetableevents_mod_form extends moodleform_mod {
         $mform->addElement('course', 'courseoverride', get_string('modsetting:coursesearch', 'timetableevents'), $options);
         $mform->setDefault('courseoverride', $this->get_course()->id);
         $mform->hideIf('courseoverride', 'coursedefaults', 'checked');
+        $mform->addHelpButton('courseoverride', 'modsetting:coursesearch', 'timetableevents');
 
         // Group selector.
         $courseid = $this->get_course()->id;
@@ -88,10 +90,12 @@ class mod_timetableevents_mod_form extends moodleform_mod {
             get_string('modsetting:groupsearch', 'timetableevents'), $groupoptions, $options);
         $mform->hideIf('groupid', 'coursedefaults', 'checked');
         $mform->disabledIf('groupid', 'nogroups', 'eq',  1);
+        $mform->addHelpButton('groupid', 'modsetting:groupsearch', 'timetableevents');
 
         $mform->addElement('date_selector', 'startdate',
             get_string('modsetting:daterange', 'timetableevents'), ['optional' => true]);
         $mform->hideIf('startdate', 'coursedefaults', 'checked');
+        $mform->addHelpButton('startdate', 'modsetting:daterange', 'timetableevents');
 
         $mform->addElement('date_selector', 'enddate', '');
         $mform->hideIf('enddate', 'coursedefaults', 'checked');
