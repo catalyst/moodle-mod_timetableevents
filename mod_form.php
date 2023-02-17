@@ -198,7 +198,7 @@ class mod_timetableevents_mod_form extends moodleform_mod {
         // If it's a new cm with a group override and the group is in this course,
         // add an initial group availability restriction. Teaching staff can manage any further
         // restriction updates themselves.
-        if (isset($data->groupid) && $data->coursemodule == 0 &&
+        if (!empty($data->groupid) && $data->coursemodule == 0 &&
             ($data->courseoverride == null || $data->courseoverride == $data->course)) {
             data_manager::update_availability($data);
         }

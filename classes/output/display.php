@@ -81,7 +81,8 @@ class display implements \renderable, \templatable {
 
                 // Show a group dropdown to filter if we are only showing events for this course
                 // and the user has access to more than one group.
-                if (is_null($instance->groupid) && is_null($instance->courseoverride)) {
+                if (is_null($instance->groupid) && (is_null($instance->courseoverride) || $instance->courseoverride == $courseid)
+                    && $cm->groupmode != 0) {
                     if (count($groupdata->groups) > 1) {
                         $this->context['editor'] = 1;
                         $options = [];
