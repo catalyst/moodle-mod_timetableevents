@@ -73,8 +73,13 @@ class acadyears_settings extends moodleform {
         }
 
         $repeatoptions = [
-            'limit' => [
-                'default' => $repeatno,
+            'startdate' => [
+                'default' => time(),
+                'rule' => ['startdate', 'callback', 'startdate'],
+            ],
+            'enddate' => [
+                'default' => time(),
+                'rule' => ['enddate', 'callback', 'enddate'],
             ],
         ];
 
@@ -124,5 +129,26 @@ class acadyears_settings extends moodleform {
 
     }
     // phpcs:enable
+
+    function validation($data, $files) {
+        $errors = array();
+        foreach ($data['enddate'] as $key => $enddate) {
+            $nextkey = $key + 1;
+
+            // Start date of term must be after end date of previous term.
+            if (array_key_exists($nextkey, $data['startdate'])) {
+                if ($data['startdate'][$nextkey] <= $enddate) {
+                    $errors['startdate[' . $nextkey .']'] = "Start date of term must be after end date of previous term.";
+                }
+            }
+
+            // End date of term must be after start date of term.
+            if ($data['enddate'][$key] <= $data['startdate'][$key]) {
+                $errors['enddate[' . $key .']'] = "End date of term must be after start date of term.";
+            }
+        }
+
+        return $errors;
+    }
 
 }
