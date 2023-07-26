@@ -180,7 +180,8 @@ function timetableevents_cm_info_view(cm_info $cm) {
  */
 function timetableevents_cm_info_dynamic(cm_info $cm) {
         $cm->set_no_view_link();
-        $cm->set_name("");
+        // Set name to display on course index.
+        $cm->set_name(get_string('pluginname', 'timetableevents'));
 }
 
 /**
