@@ -70,9 +70,9 @@ class import_events extends \external_api {
                         'courseshortname' => new \external_value(PARAM_TEXT,
                                 'Shortname of the course where this event should show.'),
                         'timestart' => new \external_value(PARAM_TEXT,
-                               'Start date and time of the event, ISO 8601 format (YYYY-MM-DDThh:mm:ss)'),
+                               'Start date and time of the event in UTC, ISO 8601 format (YYYY-MM-DDThh:mm:ss)'),
                         'timeend' => new \external_value(PARAM_TEXT,
-                                'End date and time of the event, ISO 8601 format (YYYY-MM-DDThh:mm:ss)'),
+                                'End date and time of the event in UTC, ISO 8601 format (YYYY-MM-DDThh:mm:ss)'),
                         'location' => new \external_value(PARAM_TEXT,
                                 'The location of the event'),
                     ], 'A single event.'),
@@ -203,7 +203,8 @@ class import_events extends \external_api {
      * @return array Any errors that were produced
      */
     private static function parse_time(string $time) : \DateTime {
-        $tz = \core_date::get_server_timezone_object();
+        // WR416677: Force UTC as 'get_server_timezone_object' uses Moodle "timezone" config instead of server.
+        $tz = new \DateTimeZone('UTC');
         $datetime = \DateTime::createFromFormat(self::DATE_FORMAT, $time, $tz);
         if ($datetime === false) {
             $dterrors = \DateTime::getLastErrors();
