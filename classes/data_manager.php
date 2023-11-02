@@ -919,10 +919,10 @@ class data_manager {
     /**
      * If required, set the course settings based on site defaults.
      *
-     * @param stdClass $defaultvalues The form data.
+     * @param array $defaultvalues The form data.
      * @return void
      */
-    public static function set_course_defaults($defaultvalues): void {
+    public static function set_course_defaults(array $defaultvalues): void {
         global $DB;
         // Add course settings based on site config if they're not already set.
         $coursesettings = $DB->get_record('timetableevents_course', ['courseid' => $defaultvalues['course']]);

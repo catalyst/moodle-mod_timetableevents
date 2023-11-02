@@ -43,7 +43,7 @@ class behat_mod_timetableevents extends behat_base {
      * @Given /^I send the timetableevents import web service the following:$/
      * @param \Behat\Gherkin\Node\TableNode $events
      */
-    public function i_send_the_timetableevents_import_web_service_the_following(\Behat\Gherkin\Node\TableNode $events) {
+    public function i_send_the_timetableevents_import_web_service_the_following(\Behat\Gherkin\Node\TableNode $events): void {
         global $CFG;
         require_once($CFG->libdir . '/externallib.php');
         try {
@@ -53,6 +53,16 @@ class behat_mod_timetableevents extends behat_base {
         } catch (invalid_parameter_exception $e) {
             throw new Exception($e->debuginfo);
         }
+    }
+
+    /**
+     * @Given the current timetableevents academic year is set to :name
+     * @param string $name
+     */
+    public function the_timetableevents_academic_year_is_set_to(string $name): void {
+        global $DB;
+        $yearid = $DB->get_field('timetableevents_year', 'id', ['name' => $name]);
+        set_config('currentacadyear', $yearid, 'mod_timetableevents');
     }
 
 }

@@ -14,14 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Generator class.
- *
- * @package   mod_timetableevents
- * @copyright 2022 onwards Catalyst IT EU {@link https://catalyst-eu.net}
- * @author    Sarah Cotton <sarah.cotton@catalyst-eu.net>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+use mod_timetableevents\data_manager;
+
 /**
  * mod_timetableevents data generator class
  *
@@ -43,9 +37,37 @@ class mod_timetableevents_generator extends testing_module_generator {
      *     cmid (corresponding id in course_modules table)
      */
     public function create_instance($record = null, array $options = null) {
+        global $DB;
         $record = (array)$record;
+        if (!$DB->record_exists('timetableevents_course',['courseid' => $record['course']])) {
+            data_manager::set_course_defaults(['course' => $record['course']]);
+        }
         $record['showdescription'] = 1;
         $record['update'] = 0;
+        if (!isset($record['coursedefaults'])) {
+            $record['coursedefaults'] = 1;
+        }
         return parent::create_instance($record, $options);
+    }
+
+    public function create_academic_year(array $data): int {
+        return data_manager::create_academic_year($data['name']);
+    }
+
+    public function create_academic_term(array $data): void {
+        global $DB;
+        $yearid = $DB->get_field('timetableevents_year', 'id', ['name' => $data['name']]);
+        $startdate = (int)$data['startdate'] == $data['startdate'] ? $data['startdate'] : strtotime($data['startdate']);
+        $enddate = (int)$data['enddate'] == $data['enddate'] ? $data['enddate'] : strtotime($data['enddate']);
+        $terms = (object)[
+            'startdate' => [$startdate],
+            'enddate' => [$enddate],
+        ];
+        data_manager::create_academic_terms($terms, $yearid);
+    }
+
+    public function create_event(array $data): void {
+        $data['component'] = 'mod_timetableevents';
+        $this->datagenerator->create_event($data);
     }
 }
