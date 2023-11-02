@@ -20,6 +20,6 @@ li.modtype_timetableevents img.activityicon {
     display: none !important;
 }
 
-#groupoverrides_selections .badge span {
+#page-mod-timetableevents-course #groupoverrides_selections .badge span {
     display: none;
 }
