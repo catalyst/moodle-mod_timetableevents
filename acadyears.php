@@ -66,8 +66,19 @@ if ($data = $mform->get_data()) {
 
     } else {
 
+        $setdefaults = false;
+        if (!$DB->record_exists('timetableevents_year', [])) {
+            $setdefaults = true;
+        }
         $yearid = data_manager::create_academic_year($data->name);
         data_manager::create_academic_terms($data, $yearid);
+
+        if ($setdefaults) {
+            set_config('currentacadyear', $yearid, 'mod_timetableevents');
+            set_config('teachingstartdate', $data->startdate[0], 'mod_timetableevents');
+            set_config('firstteachingsection', 5, 'mod_timetableevents');
+            set_config('teachinginterval', \mod_timetableevents\teaching_intervals::FORTNIGHTLY, 'mod_timetableevents');
+        }
     }
 
     redirect(new moodle_url('/admin/settings.php', array('section' => 'modsettingtimetableevents')));

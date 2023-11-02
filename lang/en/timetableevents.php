@@ -99,6 +99,7 @@ $string['pluginsettings:acadyears:edit'] = 'Timetable events - Edit academic yea
 $string['pluginsettings:acadyears:name'] = 'Name';
 $string['pluginsettings:acadyears:termend'] = 'Term {no} end';
 $string['pluginsettings:acadyears:termstart'] = 'Term {no} start';
+$string['pluginsettings:createacadyear'] = 'You must create at least 1 academic year to continue configuring this plugin.';
 $string['pluginsettings:currentacadyear'] = 'Current academic year';
 $string['pluginsettings:firstteachingsection'] = 'First teaching section';
 $string['pluginsettings:firstteachingsection_desc'] = 'This will be applied to all new courses unless overridden in the course settings.';
