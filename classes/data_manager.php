@@ -213,11 +213,11 @@ class data_manager {
             $termobj->yearid = $yearid;
 
             $termstart = new \DateTime('now', \core_date::get_server_timezone_object());
-            $termstart->setTimestamp($value);
+            $termstart->setTimestamp((int)$value);
             $termstart->setTime(00, 00, 00);
 
             $termend = new \DateTime('now', \core_date::get_server_timezone_object());
-            $termend->setTimestamp($terms->enddate[$key]);
+            $termend->setTimestamp((int)$terms->enddate[$key]);
             $termend->setTime(23, 59, 59);
 
             $termobj->startdate = $termstart->getTimestamp();
