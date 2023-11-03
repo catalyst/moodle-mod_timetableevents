@@ -867,16 +867,17 @@ class data_manager {
                                 $nexttermstart = new \DateTime('now', \core_date::get_server_timezone_object());
                                 $nexttermstart->setTimestamp($terms[$nexttermkey]->startdate);
                                 $nexttermstart->setTime(00, 00);
-                            }
-                            // If the new calculated date is greater than this term's end date and is less than
-                            // the start of the next term's start date.
-                            if (
-                                $daterangeend->getTimestamp() > $termend->getTimestamp()
-                                && $daterangeend->getTimestamp() < $nexttermstart->getTimestamp()
-                            ) {
-                                // Set the end date of the section to the end date of the term.
-                                $daterangeend->setTimestamp($term->enddate);
-                                $daterangeend->setTime(23, 59, 59);
+
+                                // If the new calculated date is greater than this term's end date and is less than
+                                // the start of the next term's start date.
+                                if (
+                                    $daterangeend->getTimestamp() > $termend->getTimestamp()
+                                    && $daterangeend->getTimestamp() < $nexttermstart->getTimestamp()
+                                ) {
+                                    // Set the end date of the section to the end date of the term.
+                                    $daterangeend->setTimestamp($term->enddate);
+                                    $daterangeend->setTime(23, 59, 59);
+                                }
                             }
                         }
 
