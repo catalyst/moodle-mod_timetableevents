@@ -49,10 +49,22 @@ class mod_timetableevents_generator extends testing_module_generator {
         return parent::create_instance($record, $options);
     }
 
+    /**
+     * Create a new academic year with the provided name.
+     *
+     * @param array $data Must contain name.
+     * @return int The academic year ID.
+     */
     public function create_academic_year(array $data): int {
         return data_manager::create_academic_year($data['name']);
     }
 
+    /**
+     * Create an academic term in the year specified by name.
+     *
+     * @param array $data Must contain year name, term startdate and term enddate.
+     * @return void
+     */
     public function create_academic_term(array $data): void {
         global $DB;
         $yearid = $DB->get_field('timetableevents_year', 'id', ['name' => $data['name']]);
@@ -65,6 +77,14 @@ class mod_timetableevents_generator extends testing_module_generator {
         data_manager::create_academic_terms($terms, $yearid);
     }
 
+    /**
+     * Create an event with the mod_timetablevents component.
+     *
+     * This calls to the create_event generator, so supports all the same parameters.
+     *
+     * @param array $data
+     * @return void
+     */
     public function create_event(array $data): void {
         $data['component'] = 'mod_timetableevents';
         $this->datagenerator->create_event($data);

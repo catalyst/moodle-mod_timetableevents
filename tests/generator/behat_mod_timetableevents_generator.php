@@ -22,13 +22,6 @@
  * @author    Mark Johnson <mark.johnson@catalyst-eu.net>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * Behat data generator for mod_quiz.
- *
- * @copyright 2019 The Open University
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 class behat_mod_timetableevents_generator extends behat_generator_base {
     protected function get_creatable_entities(): array {
         return [

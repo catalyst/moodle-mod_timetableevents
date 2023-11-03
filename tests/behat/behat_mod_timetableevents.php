@@ -57,6 +57,8 @@ class behat_mod_timetableevents extends behat_base {
     }
 
     /**
+     * Set the current academic year config setting based on the year name.
+     *
      * @Given the current timetableevents academic year is set to :name
      * @param string $name
      */
