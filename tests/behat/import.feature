@@ -1,4 +1,4 @@
-@catalyst @javascript @mod_timetableevents
+@javascript @mod_timetableevents
 Feature: Import timetable events
 
   Background:

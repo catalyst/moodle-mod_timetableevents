@@ -1,4 +1,4 @@
-@javascript @mod_timetableevents
+@mod_timetableevents
 Feature: Display timetable events on the course page
 
   Background:
@@ -8,9 +8,11 @@ Feature: Display timetable events on the course page
     And the following "mod_timetableevents > academic terms" exist:
       | name    | startdate  | enddate    |
       | 2022-23 | 2022-09-12 | 2022-12-31 |
-    And the following config values are set as admin:
-      | teachingstartdate | 1662940800 | mod_timetableevents |
     And the current timetableevents academic year is set to "2022-23"
+    And the following config values are set as admin:
+      | firstteachingsection | 5          | mod_timetableevents |
+      | teachinginterval     | 1          | mod_timetableevents |
+      | teachingstartdate    | 1662940800 | mod_timetableevents |
     And the following "courses" exist:
       | shortname | fullname |
       | C1        | Course 1 |
@@ -104,6 +106,7 @@ Feature: Display timetable events on the course page
     And I should not see "05/10/22 17:00" in the "Topic 6" "section"
     And I should not see "12/10/22 17:00" in the "Topic 7" "section"
 
+  @javascript
   Scenario: Teacher can switch between events for each group, and see course events
     Given I am on the "Course 1" course page logged in as "teacher1"
     And I should see "12/09/22 17:00" in the "Topic 5" "section"
