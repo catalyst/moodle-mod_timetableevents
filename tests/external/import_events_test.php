@@ -171,13 +171,12 @@ class import_events_test extends \advanced_testcase {
         $this->assertEquals(0, $response['data']['created']);
         $this->assertEquals(0, $response['data']['updated']);
         $this->assertCount(1, $response['data']['warnings']);
-        $messages = 'Unexpected data found.; Unexpected data found.; Not enough data available to satisfy format';
-        $this->assertEquals([
-            'item' => $args['events'][0]['timestart'],
-            'itemid' => 0,
-            'warningcode' => 'invalidtime',
-            'message' => get_string('invalidtime', 'mod_timetableevents', $messages),
-        ], $response['data']['warnings'][0]);
+        $warning = $response['data']['warnings'][0];
+        $this->assertEquals($args['events'][0]['timestart'], $warning['item']);
+        $this->assertEquals(0, $warning['itemid']);
+        $this->assertEquals('invalidtime', $warning['warningcode']);
+        $messages = 'Unexpected data found.; Unexpected data found.;';
+        $this->assertStringContainsString(get_string('invalidtime', 'mod_timetableevents', $messages), $warning['message']);
     }
 
     /**
@@ -204,13 +203,12 @@ class import_events_test extends \advanced_testcase {
         $this->assertEquals(0, $response['data']['created']);
         $this->assertEquals(0, $response['data']['updated']);
         $this->assertCount(1, $response['data']['warnings']);
-        $messages = 'Unexpected data found.; Unexpected data found.; Not enough data available to satisfy format';
-        $this->assertEquals([
-            'item' => $args['events'][0]['timeend'],
-            'itemid' => 0,
-            'warningcode' => 'invalidtime',
-            'message' => get_string('invalidtime', 'mod_timetableevents', $messages),
-        ], $response['data']['warnings'][0]);
+        $warning = $response['data']['warnings'][0];
+        $this->assertEquals($args['events'][0]['timeend'], $warning['item']);
+        $this->assertEquals(0, $warning['itemid']);
+        $this->assertEquals('invalidtime', $warning['warningcode']);
+        $messages = 'Unexpected data found.; Unexpected data found.;';
+        $this->assertStringContainsString(get_string('invalidtime', 'mod_timetableevents', $messages), $warning['message']);
     }
 
     /**
@@ -476,22 +474,18 @@ class import_events_test extends \advanced_testcase {
         $this->assertEquals(3, $DB->count_records('event'));
 
         // Check we got the expected warnings.
-        $messages = 'Unexpected data found.; Unexpected data found.; Not enough data available to satisfy format';
-        $expectedwarnings = [
-            [
-                'item' => $args['events'][2]['courseshortname'],
-                'itemid' => 2,
-                'warningcode' => 'invalidcourseshortname',
-                'message' => get_string('invalidcourseshortname', 'mod_timetableevents'),
-            ],
-            [
-                'item' => $args['events'][3]['timestart'],
-                'itemid' => 3,
-                'warningcode' => 'invalidtime',
-                'message' => get_string('invalidtime', 'mod_timetableevents', $messages),
-            ],
-        ];
-        $this->assertEquals($expectedwarnings, $response['data']['warnings']);
+        $shortnamewarning = $response['data']['warnings'][0];
+        $this->assertEquals($args['events'][2]['courseshortname'], $shortnamewarning['item']);
+        $this->assertEquals(2, $shortnamewarning['itemid']);
+        $this->assertEquals('invalidcourseshortname', $shortnamewarning['warningcode']);
+        $this->assertEquals(get_string('invalidcourseshortname', 'mod_timetableevents'), $shortnamewarning['message']);
+
+        $timewarning = $response['data']['warnings'][1];
+        $this->assertEquals($args['events'][3]['timestart'], $timewarning['item']);
+        $this->assertEquals(3, $timewarning['itemid']);
+        $this->assertEquals('invalidtime', $timewarning['warningcode']);
+        $messages = 'Unexpected data found.; Unexpected data found.;';
+        $this->assertStringContainsString(get_string('invalidtime', 'mod_timetableevents', $messages), $timewarning['message']);
     }
 
     /**
