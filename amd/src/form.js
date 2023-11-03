@@ -16,7 +16,7 @@
 /**
  * JS for forms.
  *
- * @package   mod_timetableevents
+ * @module    mod_timetableevents/form
  * @copyright 2022 onwards Catalyst IT EU {@link https://catalyst-eu.net}
  * @author    Sarah Cotton <sarah.cotton@catalyst-eu.net>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,9 +25,10 @@ define(['core/ajax', 'core/str', 'jquery'], function(ajax, str, $) {
 
     return {
         /**
-         * Initialize JS for forms.
-         * @access public
-         * @param {Object} params
+         * Initialize course form
+         *
+         * @param {Number} course The course ID.
+         * @param {String} sesskey
          */
         course: function(course, sesskey) {
             const terms = JSON.parse(document.querySelector('[name="termsjson"]').value);
@@ -38,7 +39,7 @@ define(['core/ajax', 'core/str', 'jquery'], function(ajax, str, $) {
 
             var event = new Event('change', { bubbles: true });
 
-            acadyear.addEventListener('change',function(){
+            acadyear.addEventListener('change', function() {
                 const yearid = document.getElementById("id_academicyear").value;
                 const year = terms[yearid];
                 let list = [];
@@ -65,7 +66,7 @@ define(['core/ajax', 'core/str', 'jquery'], function(ajax, str, $) {
 
             });
 
-            term.addEventListener('change',function(){
+            term.addEventListener('change', function() {
                 const year = document.getElementById('id_academicyear').value;
                 const startingtermid = document.getElementById('id_term').value;
 
@@ -76,7 +77,7 @@ define(['core/ajax', 'core/str', 'jquery'], function(ajax, str, $) {
             });
 
             if (group_selections) {
-                group_selections.addEventListener('click',function(e){
+                group_selections.addEventListener('click', function(e) {
                     // Get value of clicked element and add to hidden element
                     // to pass back to the form.
                     let removegroup = e.target.getAttribute('data-value');
@@ -142,16 +143,18 @@ define(['core/ajax', 'core/str', 'jquery'], function(ajax, str, $) {
                 document.getElementById('id_footertext').value = localStorage.getItem('tte_footertext');
 
                 remove_storage_keys();
-
             }
         },
 
+        /**
+         * Initialize group form.
+         */
         group: function() {
             const terms = JSON.parse(document.querySelector('[name="termsjson"]').value);
             const term = document.getElementById('id_startingtermid');
             let hiddenyear = document.querySelector('[name="year"]').value;
 
-            term.addEventListener('change',function(){
+            term.addEventListener('change', function() {
                 let startingtermid = document.getElementById('id_startingtermid').value;
 
                 document.getElementById('id_teachingstartdate_day').value = parseInt(terms[hiddenyear][startingtermid]['day'], 10);
@@ -170,12 +173,15 @@ define(['core/ajax', 'core/str', 'jquery'], function(ajax, str, $) {
             });
         },
 
+        /**
+         * Initialize instance form.
+         */
         instance: function() {
 
             const courseoverride = document.getElementById('id_courseoverride');
             const nogroups = str.get_string('modsetting:nogroups', 'timetableevents');
 
-            courseoverride.addEventListener('change',function(){
+            courseoverride.addEventListener('change', function() {
 
                 let courseid = document.getElementById('id_courseoverride').value;
 
@@ -215,6 +221,9 @@ define(['core/ajax', 'core/str', 'jquery'], function(ajax, str, $) {
     };
 });
 
+/**
+ * Clear keys used by local storage.
+ */
 function remove_storage_keys() {
     localStorage.removeItem('tte_academicyear');
     localStorage.removeItem('tte_term');
