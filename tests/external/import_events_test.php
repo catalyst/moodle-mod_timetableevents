@@ -25,6 +25,8 @@
 
 namespace mod_timetableevents\external;
 
+use core_external\external_api;
+
 /**
  * Tests for events import API
  * @covers \mod_timetableevents\external\import_events
@@ -43,7 +45,6 @@ class import_events_test extends \advanced_testcase {
      */
     public function setUp(): void {
         global $CFG;
-        require_once($CFG->libdir . '/externallib.php');
         $this->resetAfterTest();
         $this->setAdminUser();
         // Workaround for external_api::call_external_function requiring sesskey.
@@ -77,7 +78,7 @@ class import_events_test extends \advanced_testcase {
      * @return void
      */
     public function test_no_events(): void {
-        $response = \external_api::call_external_function('mod_timetableevents_import_events', ['events' => []]);
+        $response = external_api::call_external_function('mod_timetableevents_import_events', ['events' => []]);
         $this->assertFalse($response['error']);
         $this->assertEquals(0, $response['data']['created']);
         $this->assertEquals(0, $response['data']['updated']);
@@ -102,7 +103,7 @@ class import_events_test extends \advanced_testcase {
                 ],
             ],
         ];
-        $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
+        $response = external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
         $this->assertEquals(0, $response['data']['created']);
         $this->assertEquals(0, $response['data']['updated']);
@@ -134,7 +135,7 @@ class import_events_test extends \advanced_testcase {
                 ],
             ],
         ];
-        $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
+        $response = external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
         $this->assertEquals(0, $response['data']['created']);
         $this->assertEquals(0, $response['data']['updated']);
@@ -166,7 +167,7 @@ class import_events_test extends \advanced_testcase {
                 ],
             ],
         ];
-        $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
+        $response = external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
         $this->assertEquals(0, $response['data']['created']);
         $this->assertEquals(0, $response['data']['updated']);
@@ -199,7 +200,7 @@ class import_events_test extends \advanced_testcase {
                 ],
             ],
         ];
-        $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
+        $response = external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
         $this->assertEquals(0, $response['data']['created']);
         $this->assertEquals(0, $response['data']['updated']);
@@ -232,7 +233,7 @@ class import_events_test extends \advanced_testcase {
                 ],
             ],
         ];
-        $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
+        $response = external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
         $this->assertEquals(0, $response['data']['created']);
         $this->assertEquals(0, $response['data']['updated']);
@@ -266,7 +267,7 @@ class import_events_test extends \advanced_testcase {
                 ],
             ],
         ];
-        $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
+        $response = external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
         $this->assertEquals(1, $response['data']['created']);
         $this->assertEquals(0, $response['data']['updated']);
@@ -340,7 +341,7 @@ class import_events_test extends \advanced_testcase {
                 ],
             ],
         ];
-        $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
+        $response = external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
         $this->assertEquals(0, $response['data']['created']);
         $this->assertEquals(1, $response['data']['updated']);
@@ -436,7 +437,7 @@ class import_events_test extends \advanced_testcase {
                 ],
             ],
         ];
-        $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
+        $response = external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
         $this->assertEquals(1, $response['data']['created']);
         $this->assertEquals(1, $response['data']['updated']);
@@ -541,7 +542,7 @@ class import_events_test extends \advanced_testcase {
         $this->setUser($user->id);
         $_POST['sesskey'] = sesskey();
 
-        $response = \external_api::call_external_function('mod_timetableevents_import_events', ['events' => []]);
+        $response = external_api::call_external_function('mod_timetableevents_import_events', ['events' => []]);
 
         $this->assertTrue($response['error']);
         $this->assertEquals('nopermissions', $response['exception']->errorcode);
@@ -568,7 +569,7 @@ class import_events_test extends \advanced_testcase {
         $this->setUser($user->id);
         $_POST['sesskey'] = sesskey();
 
-        $response = \external_api::call_external_function('mod_timetableevents_import_events', ['events' => []]);
+        $response = external_api::call_external_function('mod_timetableevents_import_events', ['events' => []]);
         $this->assertFalse($response['error']);
         $this->assertEquals(0, $response['data']['created']);
         $this->assertEquals(0, $response['data']['updated']);

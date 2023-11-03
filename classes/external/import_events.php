@@ -25,15 +25,17 @@
 
 namespace mod_timetableevents\external;
 
-defined('MOODLE_INTERNAL') || die();
-
-require_once($CFG->libdir . '/externallib.php');
-require_once($CFG->dirroot . '/calendar/lib.php');
+use core_external\external_api;
+use core_external\external_function_parameters;
+use core_external\external_value;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_warnings;
 
 /**
  * External function for getting properties of entity generators.
  */
-class import_events extends \external_api {
+class import_events extends external_api {
     /**
      * @var string DATE_FORMAT
      *
@@ -53,39 +55,39 @@ class import_events extends \external_api {
     /**
      * Define parameters for external function.
      *
-     * @return \external_function_parameters
+     * @return external_function_parameters
      */
-    public static function execute_parameters(): \external_function_parameters {
-        return new \external_function_parameters(
+    public static function execute_parameters(): external_function_parameters {
+        return new external_function_parameters(
             [
-                'events' => new \external_multiple_structure(
-                    new \external_single_structure([
-                        'idnumber' => new \external_value(
+                'events' => new external_multiple_structure(
+                    new external_single_structure([
+                        'idnumber' => new external_value(
                             PARAM_ALPHANUMEXT,
                             'Unique ID of this event. Existing events with this ID will be updated.'
                         ),
-                        'groupidnumber' => new \external_value(
+                        'groupidnumber' => new external_value(
                             PARAM_ALPHANUMEXT,
                             'ID number of the group this event should display to.',
                             VALUE_OPTIONAL
                         ),
-                        'name' => new \external_value(
+                        'name' => new external_value(
                             PARAM_TEXT,
                             'Event name'
                         ),
-                        'courseshortname' => new \external_value(
+                        'courseshortname' => new external_value(
                             PARAM_TEXT,
                             'Shortname of the course where this event should show.'
                         ),
-                        'timestart' => new \external_value(
+                        'timestart' => new external_value(
                             PARAM_TEXT,
                             'Start date and time of the event in UTC, ISO 8601 format (YYYY-MM-DDThh:mm:ss)'
                         ),
-                        'timeend' => new \external_value(
+                        'timeend' => new external_value(
                             PARAM_TEXT,
                             'End date and time of the event in UTC, ISO 8601 format (YYYY-MM-DDThh:mm:ss)'
                         ),
-                        'location' => new \external_value(
+                        'location' => new external_value(
                             PARAM_TEXT,
                             'The location of the event'
                         ),
@@ -106,7 +108,8 @@ class import_events extends \external_api {
      * @return array
      */
     public static function execute(array $events): array {
-        global $DB;
+        global $DB, $CFG;
+        require_once($CFG->dirroot . '/calendar/lib.php');
         $context = \context_system::instance();
         self::validate_context($context);
         require_capability('mod/timetableevents:import', $context);
@@ -202,13 +205,13 @@ class import_events extends \external_api {
     /**
      * Define return values.
      *
-     * @return \external_single_structure
+     * @return external_single_structure
      */
-    public static function execute_returns(): \external_single_structure {
-        return new \external_single_structure([
-            'created' => new \external_value(PARAM_INT, 'A count of newly created events.'),
-            'updated' => new \external_value(PARAM_INT, 'A count of updated events.'),
-            'warnings' => new \external_warnings('Invalid value', 'idnumber of invalid record'),
+    public static function execute_returns(): external_single_structure {
+        return new external_single_structure([
+            'created' => new external_value(PARAM_INT, 'A count of newly created events.'),
+            'updated' => new external_value(PARAM_INT, 'A count of updated events.'),
+            'warnings' => new external_warnings('Invalid value', 'idnumber of invalid record'),
         ]);
     }
 

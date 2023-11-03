@@ -26,24 +26,25 @@
 namespace mod_timetableevents\external;
 
 use mod_timetableevents\data_manager;
-
-defined('MOODLE_INTERNAL') || die();
-
-require_once($CFG->libdir . '/externallib.php');
+use core_external\external_api;
+use core_external\external_function_parameters;
+use core_external\external_value;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
 
 /**
  * External function for getting properties of entity generators.
  */
-class get_groups extends \external_api {
+class get_groups extends external_api {
     /**
      * Define parameters for external function.
      *
-     * @return \external_function_parameters
+     * @return external_function_parameters
      */
     public static function execute_parameters() {
-        return new \external_function_parameters(
+        return new external_function_parameters(
             [
-                'courseid' => new \external_value(PARAM_INT),
+                'courseid' => new external_value(PARAM_INT),
             ]
         );
     }
@@ -53,11 +54,11 @@ class get_groups extends \external_api {
      * @return \external_multiple_structure
      */
     public static function execute_returns() {
-        return new \external_multiple_structure(
-            new \external_single_structure(
+        return new external_multiple_structure(
+            new external_single_structure(
                 [
-                    'id' => new \external_value(PARAM_INT, 'group record id'),
-                    'name' => new \external_value(PARAM_TEXT, 'group name'),
+                    'id' => new external_value(PARAM_INT, 'group record id'),
+                    'name' => new external_value(PARAM_TEXT, 'group name'),
                 ]
             )
         );
