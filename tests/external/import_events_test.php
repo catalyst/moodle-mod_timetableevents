@@ -66,7 +66,7 @@ class import_events_test extends \advanced_testcase {
             'timeduration' => HOURSECS,
             'uuid' => 'f02089cd-4f35-488d-8656-0014ea79c801',
         ]);
-        $tz = \core_date::get_server_timezone_object();
+        $tz = new \DateTimeZone('UTC');
         $this->generated['timestart'] = (new \DateTime('1 Day', $tz))->format(import_events::DATE_FORMAT);
         $this->generated['timeend'] = (new \DateTime('1 Day 2 hours', $tz))->format(import_events::DATE_FORMAT);
     }
@@ -171,7 +171,7 @@ class import_events_test extends \advanced_testcase {
         $this->assertEquals(0, $response['data']['created']);
         $this->assertEquals(0, $response['data']['updated']);
         $this->assertCount(1, $response['data']['warnings']);
-        $messages = 'Unexpected data found.; Unexpected data found.; Data missing';
+        $messages = 'Unexpected data found.; Unexpected data found.; Not enough data available to satisfy format';
         $this->assertEquals([
             'item' => $args['events'][0]['timestart'],
             'itemid' => 0,
@@ -204,7 +204,7 @@ class import_events_test extends \advanced_testcase {
         $this->assertEquals(0, $response['data']['created']);
         $this->assertEquals(0, $response['data']['updated']);
         $this->assertCount(1, $response['data']['warnings']);
-        $messages = 'Unexpected data found.; Unexpected data found.; Data missing';
+        $messages = 'Unexpected data found.; Unexpected data found.; Not enough data available to satisfy format';
         $this->assertEquals([
             'item' => $args['events'][0]['timeend'],
             'itemid' => 0,
@@ -293,7 +293,7 @@ class import_events_test extends \advanced_testcase {
         $this->assertEquals($expectedevent, $originalevent);
 
         // Ensure the new event was created correctly.
-        $tz = \core_date::get_server_timezone_object();
+        $tz = new \DateTimeZone('UTC');
         $timestart = \DateTime::createFromFormat(import_events::DATE_FORMAT, $this->generated['timestart'], $tz);
         $timeend = \DateTime::createFromFormat(import_events::DATE_FORMAT, $this->generated['timeend'], $tz);
         $timeduration = $timeend->getTimestamp() - $timestart->getTimestamp();
@@ -347,7 +347,7 @@ class import_events_test extends \advanced_testcase {
         $this->assertCount(0, $response['data']['warnings']);
 
         // Check existing event was updated.
-        $tz = \core_date::get_server_timezone_object();
+        $tz = new \DateTimeZone('UTC');
         $timestart = \DateTime::createFromFormat(import_events::DATE_FORMAT, $this->generated['timestart'], $tz);
         $timeend = \DateTime::createFromFormat(import_events::DATE_FORMAT, $this->generated['timeend'], $tz);
         $timeduration = $timeend->getTimestamp() - $timestart->getTimestamp();
@@ -358,12 +358,12 @@ class import_events_test extends \advanced_testcase {
             MUST_EXIST
         );
         $expectedevent = (object)[
-            'uuid' => $this->generated['event']->uuid,
+            'uuid' => (string)$this->generated['event']->uuid,
             'name' => $args['events'][0]['name'],
             'courseid' => $newcourse->id,
             'groupid' => $newgroup->id,
-            'timestart' => $timestart->getTimestamp(),
-            'timeduration' => $timeduration,
+            'timestart' => (string)$timestart->getTimestamp(),
+            'timeduration' => (string)$timeduration,
             'eventtype' => 'group',
             'component' => $this->generated['event']->component,
             'location' => $args['events'][0]['location'],
@@ -463,7 +463,7 @@ class import_events_test extends \advanced_testcase {
         $this->assertEquals($expectedevent, $originalevent);
 
         // Check the second generated event has changed.
-        $tz = \core_date::get_server_timezone_object();
+        $tz = new \DateTimeZone('UTC');
         $timestart = \DateTime::createFromFormat(import_events::DATE_FORMAT, $this->generated['timestart'], $tz);
         $timeend = \DateTime::createFromFormat(import_events::DATE_FORMAT, $this->generated['timeend'], $tz);
         $timeduration = $timeend->getTimestamp() - $timestart->getTimestamp();
@@ -512,7 +512,7 @@ class import_events_test extends \advanced_testcase {
         $this->assertEquals(3, $DB->count_records('event'));
 
         // Check we got the expected warnings.
-        $messages = 'Unexpected data found.; Unexpected data found.; Data missing';
+        $messages = 'Unexpected data found.; Unexpected data found.; Not enough data available to satisfy format';
         $expectedwarnings = [
             [
                 'item' => $args['events'][2]['courseshortname'],
@@ -545,7 +545,12 @@ class import_events_test extends \advanced_testcase {
 
         $this->assertTrue($response['error']);
         $this->assertEquals('nopermissions', $response['exception']->errorcode);
-        $this->assertContains(get_string('timetableevents:import', 'mod_timetableevents'), $response['exception']->message);
+        $this->assertTrue(
+            str_contains(
+                $response['exception']->message,
+                get_string('timetableevents:import', 'mod_timetableevents')
+            )
+        );
     }
 
     /**
