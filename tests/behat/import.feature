@@ -2,6 +2,8 @@
 Feature: Import timetable events
 
   Background:
+    Given the following config values are set as admin:
+      | timezone | UTC |
     Given the following "courses" exist:
       | shortname | fullname | startdate           |
       | C1        | Course 1 | ## yesterday ##%s## |
@@ -11,11 +13,11 @@ Feature: Import timetable events
       | G1       | C1     | Group 1 |
       | G2       | C1     | Group 2 |
     And the following "users" exist:
-      | username    | timezone |
-      | group1user  | UTC      |
-      | group2user  | UTC      |
-      | course2user | UTC      |
-      | teacher1    | UTC      |
+      | username    |
+      | group1user  |
+      | group2user  |
+      | course2user |
+      | teacher1    |
     And the following "course enrolments" exist:
       | user        | course  | enrol  | role           |
       | group1user  | C1      | manual | student        |
