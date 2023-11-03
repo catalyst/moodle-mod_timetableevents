@@ -9,4 +9,4 @@ jobs:
     with:
       disable_release: true
       disable_phpdoc: true # Deprecated warnings and false positives.
-      disable_validate: true # Deprecated warnings.
+      disable_ci_validate: true # Deprecated warnings.
