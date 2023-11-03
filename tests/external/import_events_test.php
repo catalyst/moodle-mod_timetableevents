@@ -272,25 +272,7 @@ class import_events_test extends \advanced_testcase {
         $this->assertEquals(0, $response['data']['updated']);
         $this->assertCount(0, $response['data']['warnings']);
 
-        // Ensure the original event has not changed.
-        $originalevent = $DB->get_record(
-            'event',
-            ['id' => $this->generated['event']->id],
-            'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location',
-            MUST_EXIST
-        );
-        $expectedevent = (object)[
-            'uuid' => $this->generated['event']->uuid,
-            'name' => $this->generated['event']->name,
-            'courseid' => $this->generated['event']->courseid,
-            'groupid' => $this->generated['event']->groupid,
-            'timestart' => $this->generated['event']->timestart,
-            'timeduration' => $this->generated['event']->timeduration,
-            'eventtype' => $this->generated['event']->eventtype,
-            'component' => $this->generated['event']->component,
-            'location' => $this->generated['event']->location,
-        ];
-        $this->assertEquals($expectedevent, $originalevent);
+        $this->assert_original_event_unchanged();
 
         // Ensure the new event was created correctly.
         $tz = new \DateTimeZone('UTC');
@@ -442,25 +424,7 @@ class import_events_test extends \advanced_testcase {
         $this->assertEquals(1, $response['data']['updated']);
         $this->assertCount(2, $response['data']['warnings']);
 
-        // Check the original event has not changed.
-        $originalevent = $DB->get_record(
-            'event',
-            ['id' => $this->generated['event']->id],
-            'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location',
-            MUST_EXIST
-        );
-        $expectedevent = (object)[
-                'uuid' => $this->generated['event']->uuid,
-                'name' => $this->generated['event']->name,
-                'courseid' => $this->generated['event']->courseid,
-                'groupid' => $this->generated['event']->groupid,
-                'timestart' => $this->generated['event']->timestart,
-                'timeduration' => $this->generated['event']->timeduration,
-                'eventtype' => $this->generated['event']->eventtype,
-                'component' => $this->generated['event']->component,
-                'location' => $this->generated['event']->location,
-        ];
-        $this->assertEquals($expectedevent, $originalevent);
+        $this->assert_original_event_unchanged();
 
         // Check the second generated event has changed.
         $tz = new \DateTimeZone('UTC');
@@ -573,5 +537,31 @@ class import_events_test extends \advanced_testcase {
         $this->assertEquals(0, $response['data']['created']);
         $this->assertEquals(0, $response['data']['updated']);
         $this->assertEmpty($response['data']['warnings']);
+    }
+
+    /**
+     * Asserts that the event record for $this->generated['event']->id still matches the generated data.
+     */
+    protected function assert_original_event_unchanged(): void {
+        global $DB;
+        // Ensure the original event has not changed.
+        $originalevent = $DB->get_record(
+            'event',
+            ['id' => $this->generated['event']->id],
+            'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location',
+            MUST_EXIST
+        );
+        $expectedevent = (object)[
+            'uuid' => $this->generated['event']->uuid,
+            'name' => $this->generated['event']->name,
+            'courseid' => $this->generated['event']->courseid,
+            'groupid' => $this->generated['event']->groupid,
+            'timestart' => $this->generated['event']->timestart,
+            'timeduration' => $this->generated['event']->timeduration,
+            'eventtype' => $this->generated['event']->eventtype,
+            'component' => $this->generated['event']->component,
+            'location' => $this->generated['event']->location,
+        ];
+        $this->assertEquals($expectedevent, $originalevent);
     }
 }
