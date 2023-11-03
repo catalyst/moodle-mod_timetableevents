@@ -28,7 +28,8 @@ namespace mod_timetableevents;
 use stdClass;
 /**
  * Unit tests for data_manager class
- * @group timetableevents
+ *
+ * @covers \mod_timetableevents\data_manager
  */
 class data_manager_test extends \advanced_testcase {
     /**
