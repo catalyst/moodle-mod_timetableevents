@@ -28,7 +28,6 @@
  * Structure step to restore one timetableevents activity
  */
 class restore_timetableevents_activity_structure_step extends restore_activity_structure_step {
-
     /**
      * List of elements that can be restored.
      * @return array
@@ -68,7 +67,5 @@ class restore_timetableevents_activity_structure_step extends restore_activity_s
      * Define data processed after execute for timetable event.
      */
     protected function after_execute() {
-
     }
-
 }

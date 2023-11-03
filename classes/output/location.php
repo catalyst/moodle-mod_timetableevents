@@ -31,7 +31,6 @@ use renderer_base;
  * Location renderer.
  */
 class location implements \renderable, \templatable {
-
     /**
      * @var string $location
      */
@@ -59,10 +58,10 @@ class location implements \renderable, \templatable {
      * @param renderer_base $output
      * @return array
      */
-    public function export_for_template(renderer_base $output) : array {
+    public function export_for_template(renderer_base $output): array {
         return [
             'location' => $this->location,
-            'url' => $this->url
+            'url' => $this->url,
         ];
     }
 }

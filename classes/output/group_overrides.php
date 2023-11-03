@@ -32,7 +32,6 @@ use renderer_base;
  * Group overrides renderer.
  */
 class group_overrides implements \renderable, \templatable {
-
     /**
      * @var array $groupoverrides
      */
@@ -46,12 +45,13 @@ class group_overrides implements \renderable, \templatable {
     public function __construct(int $courseid) {
         global $DB;
         $groupoverrides = $DB->get_records_sql(
-           "SELECT tg.id, g.id AS groupid, tg.startingtermid, tg.teachingstartdate, g.name, tt.yearid
-              FROM {timetableevents_group} tg
-              JOIN {timetableevents_term} tt ON tt.id = tg.startingtermid
-              JOIN {groups} g ON tg.groupid = g.id
-              JOIN {course} c ON c.id = g.courseid
-             WHERE c.id = ?", [$courseid]
+            "SELECT tg.id, g.id AS groupid, tg.startingtermid, tg.teachingstartdate, g.name, tt.yearid
+               FROM {timetableevents_group} tg
+               JOIN {timetableevents_term} tt ON tt.id = tg.startingtermid
+               JOIN {groups} g ON tg.groupid = g.id
+               JOIN {course} c ON c.id = g.courseid
+              WHERE c.id = ?",
+            [$courseid]
         );
 
         $this->groupoverrides = [];
@@ -70,7 +70,7 @@ class group_overrides implements \renderable, \templatable {
             $this->groupoverrides[$groupoverride->groupid] = [
                 'label' => get_string('coursesetting:groupoverride', 'mod_timetableevents', $strparams),
                 'value' => $groupoverride->id,
-                'groupid' => $groupoverride->groupid
+                'groupid' => $groupoverride->groupid,
             ];
         }
     }
@@ -81,7 +81,7 @@ class group_overrides implements \renderable, \templatable {
      * @param renderer_base $output
      * @return array
      */
-    public function export_for_template(renderer_base $output) : array {
+    public function export_for_template(renderer_base $output): array {
         return array_values($this->groupoverrides);
     }
 
@@ -90,7 +90,7 @@ class group_overrides implements \renderable, \templatable {
      *
      * @return array
      */
-    public function get_group_overrides() : array {
+    public function get_group_overrides(): array {
         return $this->groupoverrides;
     }
 }

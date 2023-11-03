@@ -24,7 +24,7 @@
  */
 
 require_once('../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 use mod_timetableevents\data_manager;
 use mod_timetableevents\forms\acadyears_settings;
@@ -57,15 +57,11 @@ if (!is_null($edit)) {
 $mform = new acadyears_settings($pageurl, $customdata, null, null);
 
 if ($data = $mform->get_data()) {
-
     global $DB;
 
     if (isset($data->edit) && $data->edit == 1) {
-
         data_manager::update_academic_terms($data);
-
     } else {
-
         $setdefaults = false;
         if (!$DB->record_exists('timetableevents_year', [])) {
             $setdefaults = true;
@@ -81,14 +77,10 @@ if ($data = $mform->get_data()) {
         }
     }
 
-    redirect(new moodle_url('/admin/settings.php', array('section' => 'modsettingtimetableevents')));
-
+    redirect(new moodle_url('/admin/settings.php', ['section' => 'modsettingtimetableevents']));
 } else if ($mform->is_cancelled()) {
-
-    redirect(new moodle_url('/admin/settings.php', array('section' => 'modsettingtimetableevents')));
-
+    redirect(new moodle_url('/admin/settings.php', ['section' => 'modsettingtimetableevents']));
 } else {
-
     if (!is_null($edit) && $edit == 1) {
         if (!is_null($yearid)) {
             $id = $yearid;

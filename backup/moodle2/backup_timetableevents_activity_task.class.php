@@ -32,7 +32,6 @@ require_once($CFG->dirroot . '/mod/timetableevents/backup/moodle2/backup_timetab
  * Provides the steps to perform one complete backup of the Timetable events instance
  */
 class backup_timetableevents_activity_task extends backup_activity_task {
-
     /**
      * No specific settings for this activity
      */

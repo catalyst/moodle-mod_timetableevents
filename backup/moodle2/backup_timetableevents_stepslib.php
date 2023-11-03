@@ -26,26 +26,29 @@
  * Define the complete timetable events structure for backup, with file and id annotations
  */
 class backup_timetableevents_activity_structure_step extends backup_activity_structure_step {
-
     /**
      * List of elements that can be backed up.
      * @return \backup_nested_element
      */
-    protected function define_structure() : \backup_nested_element {
+    protected function define_structure(): \backup_nested_element {
 
         // Define each element separated.
-        $timetableevent = new backup_nested_element('timetableevents', array('id'),
-                                                    array('courseoverride',
-                                                          'name',
-                                                          'intro',
-                                                          'introformat',
-                                                          'groupid',
-                                                          'startdate',
-                                                          'enddate')
-                                                    );
+        $timetableevent = new backup_nested_element(
+            'timetableevents',
+            ['id'],
+            [
+                'courseoverride',
+                'name',
+                'intro',
+                'introformat',
+                'groupid',
+                'startdate',
+                'enddate',
+            ]
+        );
 
         // Define sources.
-        $timetableevent->set_source_table('timetableevents', array('id' => backup::VAR_ACTIVITYID));
+        $timetableevent->set_source_table('timetableevents', ['id' => backup::VAR_ACTIVITYID]);
 
         // Return the root element (timetableevents), wrapped into standard activity structure.
         return $this->prepare_activity_structure($timetableevent);

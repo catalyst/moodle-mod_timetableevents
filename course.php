@@ -24,7 +24,7 @@
  */
 
 require_once('../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 use mod_timetableevents\data_manager;
 use mod_timetableevents\forms\course_settings;
@@ -43,17 +43,16 @@ $pageurl = new moodle_url('/mod/timetableevents/course.php', ['id' => $course->i
 $PAGE->set_url($pageurl);
 
 $PAGE->navbar->ignore_active();
-$PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php', array('id' => $course->id)));
-$PAGE->navbar->add(get_string('courseadministration'), new moodle_url('/course/admin.php', array('courseid' => $course->id)));
+$PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php', ['id' => $course->id]));
+$PAGE->navbar->add(get_string('courseadministration'), new moodle_url('/course/admin.php', ['courseid' => $course->id]));
 $PAGE->navbar->add(get_string('pluginname', 'timetableevents'));
 
 $PAGE->set_title($SITE->shortname . ': '  .  get_string('pluginname', 'timetableevents'));
 
 $saveddata = data_manager::get_course_form_data($course->id);
-$mform = new course_settings($pageurl, array('data' => $saveddata, 'course' => $course), null, null);
+$mform = new course_settings($pageurl, ['data' => $saveddata, 'course' => $course], null, null);
 
 if ($data = $mform->get_data()) {
-
     $courserecord = $DB->get_record('timetableevents_course', ['courseid' => $course->id]);
 
     // Create record or update timetableevents_course table.
@@ -97,10 +96,9 @@ if ($data = $mform->get_data()) {
     // If updating the course settings, rebuild the course cache.
     rebuild_course_cache($course->id);
 
-    redirect(new moodle_url('/course/admin.php', array('courseid' => $course->id)));
-
+    redirect(new moodle_url('/course/admin.php', ['courseid' => $course->id]));
 } else if ($mform->is_cancelled()) {
-    redirect(new moodle_url('/course/admin.php', array('courseid' => $course->id)));
+    redirect(new moodle_url('/course/admin.php', ['courseid' => $course->id]));
 }
 
 if ($saveddata) {
@@ -115,7 +113,7 @@ $mform->display();
 echo $OUTPUT->box_end();
 $params = [
     'course' => $course->id,
-    'sesskey' => sesskey()
+    'sesskey' => sesskey(),
 ];
 $PAGE->requires->js_call_amd('mod_timetableevents/form', 'course', $params);
 echo $OUTPUT->footer();

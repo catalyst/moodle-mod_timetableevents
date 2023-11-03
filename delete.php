@@ -24,7 +24,7 @@
  */
 
 require_once('../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 // No guest autologin.
 require_login(0, false);
@@ -45,8 +45,7 @@ if (!is_null($delete)) {
     $DB->delete_records_list('timetableevents_term', 'yearid', [$id]);
     $DB->delete_records_list('timetableevents_year', 'id', [$id]);
 
-    redirect(new moodle_url('/admin/settings.php', array('section' => 'modsettingtimetableevents')));
-
+    redirect(new moodle_url('/admin/settings.php', ['section' => 'modsettingtimetableevents']));
 } else {
     echo $OUTPUT->header();
     echo $OUTPUT->heading(get_string('pluginsettings:acadyears:edit', 'mod_timetableevents'));
@@ -58,4 +57,3 @@ if (!is_null($delete)) {
     echo $OUTPUT->box_end();
     echo $OUTPUT->footer();
 }
-

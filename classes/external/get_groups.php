@@ -35,17 +35,16 @@ require_once($CFG->libdir . '/externallib.php');
  * External function for getting properties of entity generators.
  */
 class get_groups extends \external_api {
-
     /**
      * Define parameters for external function.
      *
      * @return \external_function_parameters
      */
-    public static function get_groups_parameters() {
+    public static function execute_parameters() {
         return new \external_function_parameters(
-            array(
+            [
                 'courseid' => new \external_value(PARAM_INT),
-            )
+            ]
         );
     }
     /**
@@ -53,13 +52,13 @@ class get_groups extends \external_api {
      *
      * @return \external_multiple_structure
      */
-    public static function get_groups_returns() {
+    public static function execute_returns() {
         return new \external_multiple_structure(
             new \external_single_structure(
-                array(
+                [
                     'id' => new \external_value(PARAM_INT, 'group record id'),
                     'name' => new \external_value(PARAM_TEXT, 'group name'),
-                )
+                ]
             )
         );
     }
@@ -70,7 +69,7 @@ class get_groups extends \external_api {
      * @param int $courseid The course to get groups for.
      * @return array
      */
-    public static function get_groups(int $courseid): array {
+    public static function execute(int $courseid): array {
         global $CFG;
         require_once("$CFG->dirroot/group/lib.php");
         $params = self::validate_parameters(self::get_groups_parameters(), ['courseid' => $courseid]);

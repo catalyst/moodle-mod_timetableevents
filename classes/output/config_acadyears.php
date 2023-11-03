@@ -32,7 +32,6 @@ use renderer_base;
  * Acadyears renderer.
  */
 class config_acadyears implements \renderable, \templatable {
-
     /**
      * @var array $context
      */
@@ -48,7 +47,7 @@ class config_acadyears implements \renderable, \templatable {
     public function __construct(string $id, string $name, array $terms) {
         $this->context = [
             'id' => $id,
-            'name' => $name
+            'name' => $name,
         ];
 
         // Get academic years that have been used so we can prevent them being deleted.
@@ -87,7 +86,7 @@ class config_acadyears implements \renderable, \templatable {
      *
      * @return array
      */
-    public function export_for_template(renderer_base $output) : array {
+    public function export_for_template(renderer_base $output): array {
         return $this->context;
     }
 }

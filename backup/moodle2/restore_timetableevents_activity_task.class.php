@@ -32,7 +32,6 @@ require_once($CFG->dirroot . '/mod/timetableevents/backup/moodle2/restore_timeta
  * Class that provides all the settings and steps to perform one restore of the activity.
  */
 class restore_timetableevents_activity_task extends restore_activity_task {
-
     /**
      * Define (add) particular settings this activity can have
      */
@@ -55,8 +54,19 @@ class restore_timetableevents_activity_task extends restore_activity_task {
     public static function define_decode_contents() {
         $contents = [];
 
-        $contents[] = new restore_decode_content('timetableevents',
-            array('courseoverride', 'name', 'intro', 'introformat', 'groupid', 'startdate', 'enddate'), 'timetableevents');
+        $contents[] = new restore_decode_content(
+            'timetableevents',
+            [
+                'courseoverride',
+                'name',
+                'intro',
+                'introformat',
+                'groupid',
+                'startdate',
+                'enddate',
+            ],
+            'timetableevents'
+        );
 
         return $contents;
     }

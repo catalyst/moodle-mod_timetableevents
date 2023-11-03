@@ -28,13 +28,12 @@
  *
  * @param int $oldversion The version we are upgrading from
  */
-function xmldb_timetableevents_upgrade(int $oldversion = 0) : bool {
+function xmldb_timetableevents_upgrade(int $oldversion = 0): bool {
     global $DB;
 
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2022081600) {
-
         // Define fields to be added to timetableevents.
         $table = new xmldb_table('timetableevents');
 
@@ -49,13 +48,13 @@ function xmldb_timetableevents_upgrade(int $oldversion = 0) : bool {
             new xmldb_field('enddate', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'startdate'),
             new xmldb_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'enddate'),
             new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'usermodified'),
-            new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'timecreated')
+            new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'timecreated'),
         ];
 
         $keys = [
             new xmldb_key('course', XMLDB_KEY_FOREIGN, ['course'], 'course', ['id']),
             new xmldb_key('groupid', XMLDB_KEY_FOREIGN, ['groupid'], 'groups', ['id']),
-            new xmldb_key('usermodified', XMLDB_KEY_FOREIGN, ['usermodified'], 'user', ['id'])
+            new xmldb_key('usermodified', XMLDB_KEY_FOREIGN, ['usermodified'], 'user', ['id']),
         ];
 
         foreach ($fields as $field) {
@@ -166,7 +165,6 @@ function xmldb_timetableevents_upgrade(int $oldversion = 0) : bool {
     }
 
     if ($oldversion < 2022102100) {
-
         // Define key firstsection (foreign-unique) to be dropped form timetableevents_course.
         $table = new xmldb_table('timetableevents_course');
         $key = new xmldb_key('firstsection', XMLDB_KEY_FOREIGN_UNIQUE, ['firstsection'], 'section', ['id']);

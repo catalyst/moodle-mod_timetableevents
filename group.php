@@ -24,7 +24,7 @@
  */
 
 require_once('../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 use mod_timetableevents\forms\group_settings;
 
@@ -45,16 +45,15 @@ $pageurl = new moodle_url('/mod/timetableevents/group.php');
 $PAGE->set_url($pageurl);
 
 $PAGE->navbar->ignore_active();
-$PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php', array('id' => $course->id)));
-$PAGE->navbar->add(get_string('courseadministration'), new moodle_url('/course/admin.php', array('courseid' => $course->id)));
+$PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php', ['id' => $course->id]));
+$PAGE->navbar->add(get_string('courseadministration'), new moodle_url('/course/admin.php', ['courseid' => $course->id]));
 $PAGE->navbar->add(get_string('pluginname', 'timetableevents'));
 
 $PAGE->set_title($SITE->shortname . ': '  .  get_string('pluginname', 'timetableevents'));
 
-$mform = new group_settings($pageurl, array('year' => $year, 'course' => $course), null, null);
+$mform = new group_settings($pageurl, ['year' => $year, 'course' => $course], null, null);
 
 if ($data = $mform->get_data()) {
-
     $group = $DB->get_record('timetableevents_group', ['groupid' => $data->groupid]);
 
     $groupobj = new stdClass();
@@ -69,10 +68,9 @@ if ($data = $mform->get_data()) {
         $DB->update_record('timetableevents_group', $groupobj);
     }
 
-    redirect(new moodle_url('/mod/timetableevents/course.php', array('id' => $course->id)));
-
+    redirect(new moodle_url('/mod/timetableevents/course.php', ['id' => $course->id]));
 } else if ($mform->is_cancelled()) {
-    redirect(new moodle_url('/mod/timetableevents/course.php', array('id' => $course->id)));
+    redirect(new moodle_url('/mod/timetableevents/course.php', ['id' => $course->id]));
 }
 
 echo $OUTPUT->header();

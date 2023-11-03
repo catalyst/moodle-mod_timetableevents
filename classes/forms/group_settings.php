@@ -30,9 +30,9 @@ use moodleform;
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once($CFG->libdir. '/formslib.php');
-require_once($CFG->dirroot.'/lib/grouplib.php');
-require_once($CFG->dirroot.'/mod/timetableevents/lib.php');
+require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->dirroot . '/lib/grouplib.php');
+require_once($CFG->dirroot . '/mod/timetableevents/lib.php');
 
 /**
  * Class for the group overrides settings page.
@@ -43,7 +43,6 @@ require_once($CFG->dirroot.'/mod/timetableevents/lib.php');
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class group_settings extends moodleform {
-
     /**
      * Form definition.
      */
@@ -57,8 +56,12 @@ class group_settings extends moodleform {
             foreach ($groups as $group) {
                 $groupoptions[$group->id] = $group->name;
             }
-            $mform->addElement('select', 'groupid',
-                get_string('coursesetting:groupoverrides', 'timetableevents'), $groupoptions);
+            $mform->addElement(
+                'select',
+                'groupid',
+                get_string('coursesetting:groupoverrides', 'timetableevents'),
+                $groupoptions
+            );
             $mform->addHelpButton('groupid', 'coursesetting:groupoverrides', 'timetableevents');
 
             $terms = data_manager::get_terms($this->_customdata['year']);
@@ -68,15 +71,27 @@ class group_settings extends moodleform {
                     $termoptions[$term->termid] = $term->termname;
                 }
 
-                $mform->addElement('select', 'startingtermid', get_string('coursesetting:term:group', 'timetableevents'), $termoptions);
+                $mform->addElement(
+                    'select',
+                    'startingtermid',
+                    get_string('coursesetting:term:group', 'timetableevents'),
+                    $termoptions
+                );
                 $mform->addHelpButton('startingtermid', 'coursesetting:term:group', 'timetableevents');
             } else {
-                $mform->addElement('static', 'academicyear', get_string('coursesetting:academicyear', 'timetableevents'),
-                    get_string('coursesetting:academicyear:notconfigured', 'timetableevents'));
+                $mform->addElement(
+                    'static',
+                    'academicyear',
+                    get_string('coursesetting:academicyear', 'timetableevents'),
+                    get_string('coursesetting:academicyear:notconfigured', 'timetableevents')
+                );
             }
 
-            $mform->addElement('date_selector', 'teachingstartdate',
-                get_string('coursesetting:teachingstartdate:group', 'timetableevents'));
+            $mform->addElement(
+                'date_selector',
+                'teachingstartdate',
+                get_string('coursesetting:teachingstartdate:group', 'timetableevents')
+            );
 
             // Reset keys so we can set the date from the first element in the terms array.
             $termoptions = array_keys($termoptions);
@@ -84,8 +99,12 @@ class group_settings extends moodleform {
             $mform->addHelpButton('teachingstartdate', 'coursesetting:teachingstartdate:group', 'timetableevents');
             $this->add_action_buttons();
         } else {
-            $mform->addElement('static', 'groupid', get_string('coursesetting:groupoverrides', 'timetableevents'),
-                get_string('coursesetting:groupoverride:notconfigured', 'timetableevents'));
+            $mform->addElement(
+                'static',
+                'groupid',
+                get_string('coursesetting:groupoverrides', 'timetableevents'),
+                get_string('coursesetting:groupoverride:notconfigured', 'timetableevents')
+            );
             $mform->addElement('cancel', 'cancel', get_string('cancel'));
         }
 
@@ -97,6 +116,5 @@ class group_settings extends moodleform {
 
         $mform->addElement('hidden', 'termsjson', json_encode((object) $terms));
         $mform->setType('termsjson', PARAM_RAW);
-
     }
 }

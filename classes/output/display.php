@@ -34,7 +34,6 @@ use stdClass;
  * Location renderer.
  */
 class display implements \renderable, \templatable {
-
     /**
      * @var array $context
      */
@@ -49,8 +48,13 @@ class display implements \renderable, \templatable {
      * @param stdClass $courseconfig The course config settings
      * @param array $daterange The course config settings
      */
-    public function __construct(int $courseid, cm_info $cm, array $siteconfig,
-                                stdClass $courseconfig, array $daterange) {
+    public function __construct(
+        int $courseid,
+        cm_info $cm,
+        array $siteconfig,
+        stdClass $courseconfig,
+        array $daterange
+    ) {
         global $DB, $OUTPUT, $USER, $SESSION;
 
         $this->context = [
@@ -63,13 +67,15 @@ class display implements \renderable, \templatable {
 
         $instance = $DB->get_record('timetableevents', ['id' => $cm->instance]);
         $context = \context_module::instance($cm->id);
-        $grouppreference = get_user_preferences('mod_timetableevents_' . $courseid, null,  $USER->id);
+        $grouppreference = get_user_preferences('mod_timetableevents_' . $courseid, null, $USER->id);
 
         // If the current section is greater or equal to the first teaching section.
         if ($cm->sectionnum >= $courseconfig->firstsection) {
-
             $this->context['icon'] = $OUTPUT->pix_icon(
-                'course', 'theme', 'mod_timetableevents', ['class' => 'mod_timetableevents_course_icon']
+                'course',
+                'theme',
+                'mod_timetableevents',
+                ['class' => 'mod_timetableevents_course_icon']
             );
 
             $groupdata = data_manager::get_user_groups_and_event_type($cm, $courseid, $context);
@@ -81,8 +87,11 @@ class display implements \renderable, \templatable {
 
                 // Show a group dropdown to filter if we are only showing events for this course
                 // and the user has access to more than one group.
-                if (is_null($instance->groupid) && (is_null($instance->courseoverride) || $instance->courseoverride == $courseid)
-                    && $cm->groupmode != 0) {
+                if (
+                    is_null($instance->groupid)
+                    && (is_null($instance->courseoverride) || $instance->courseoverride == $courseid)
+                    && $cm->groupmode != 0
+                ) {
                     if (count($groupdata->groups) > 1) {
                         $this->context['editor'] = 1;
                         $options = [];
@@ -91,11 +100,19 @@ class display implements \renderable, \templatable {
                         }
 
                         $referrer = $SESSION->fromdiscussion;
-                        $url = new \moodle_url('/mod/timetableevents/group_preference.php',
-                            ['course' => $courseid, 'cm' => $cm->id, 'sesskey' => sesskey(), 'referrer' => $referrer]);
-                        $select = $OUTPUT->single_select($url, 'mod_timetableevents-select-groups',
-                            $options, $grouppreference, null, 'mod_timetableevents-select-groups' . $cm->id,
-                            ['class' => 'mod_timetableevents-select-groups']);
+                        $url = new \moodle_url(
+                            '/mod/timetableevents/group_preference.php',
+                            ['course' => $courseid, 'cm' => $cm->id, 'sesskey' => sesskey(), 'referrer' => $referrer]
+                        );
+                        $select = $OUTPUT->single_select(
+                            $url,
+                            'mod_timetableevents-select-groups',
+                            $options,
+                            $grouppreference,
+                            null,
+                            'mod_timetableevents-select-groups' . $cm->id,
+                            ['class' => 'mod_timetableevents-select-groups']
+                        );
                         $this->context['select'] = $select;
                     }
                 }
@@ -111,7 +128,6 @@ class display implements \renderable, \templatable {
                 } else {
                     $this->context['noevents'] = 1;
                 }
-
             } else {
                 $this->context['noevents'] = 1;
             }
@@ -122,7 +138,6 @@ class display implements \renderable, \templatable {
         // If the user has the viewall capability, show details about what has been configured for the instance
         // to help with troubleshooting.
         if (has_capability('mod/timetableevents:viewall', $context)) {
-
             if ($instance->courseoverride !== null && $instance->courseoverride != $instance->course) {
                 $course = get_course($instance->courseoverride);
             } else {
@@ -153,7 +168,9 @@ class display implements \renderable, \templatable {
                 $daterangestring = $daterange[$groupid]['start'] . ' - ' . $daterange[$groupid]['end'];
             }
 
-            $this->context['footertextadmin'] = get_string('footertextadmin', 'timetableevents',
+            $this->context['footertextadmin'] = get_string(
+                'footertextadmin',
+                'timetableevents',
                 ['coursename' => $course->fullname, 'group' => $groupname, 'daterange' => $daterangestring]
             );
         }
@@ -165,7 +182,7 @@ class display implements \renderable, \templatable {
      * @param renderer_base $output
      * @return array
      */
-    public function export_for_template(renderer_base $output) : array {
+    public function export_for_template(renderer_base $output): array {
         return $this->context;
     }
 }

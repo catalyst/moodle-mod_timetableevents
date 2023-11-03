@@ -25,7 +25,6 @@ use mod_timetableevents\data_manager;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_timetableevents_generator extends testing_module_generator {
-
     /**
      * Create a new timetable events module instance.
      *
@@ -39,7 +38,7 @@ class mod_timetableevents_generator extends testing_module_generator {
     public function create_instance($record = null, array $options = null) {
         global $DB;
         $record = (array)$record;
-        if (!$DB->record_exists('timetableevents_course',['courseid' => $record['course']])) {
+        if (!$DB->record_exists('timetableevents_course', ['courseid' => $record['course']])) {
             data_manager::set_course_defaults(['course' => $record['course']]);
         }
         $record['showdescription'] = 1;

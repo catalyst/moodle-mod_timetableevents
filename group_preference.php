@@ -35,7 +35,6 @@ $referrer = required_param('referrer', PARAM_RAW);
 
 if (!is_null($course)) {
     require_sesskey();
-    set_user_preference('mod_timetableevents_' . $course , $group);
+    set_user_preference('mod_timetableevents_' . $course, $group);
     redirect(new moodle_url($referrer));
 }
-

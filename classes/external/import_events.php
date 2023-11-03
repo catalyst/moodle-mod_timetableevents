@@ -34,7 +34,6 @@ require_once($CFG->dirroot . '/calendar/lib.php');
  * External function for getting properties of entity generators.
  */
 class import_events extends \external_api {
-
     /**
      * @var string DATE_FORMAT
      *
@@ -61,23 +60,38 @@ class import_events extends \external_api {
             [
                 'events' => new \external_multiple_structure(
                     new \external_single_structure([
-                        'idnumber' => new \external_value(PARAM_ALPHANUMEXT,
-                                'Unique ID of this event. Existing events with this ID will be updated.'),
-                        'groupidnumber' => new \external_value(PARAM_ALPHANUMEXT,
-                                'ID number of the group this event should display to.', VALUE_OPTIONAL),
-                        'name' => new \external_value(PARAM_TEXT,
-                                'Event name'),
-                        'courseshortname' => new \external_value(PARAM_TEXT,
-                                'Shortname of the course where this event should show.'),
-                        'timestart' => new \external_value(PARAM_TEXT,
-                               'Start date and time of the event in UTC, ISO 8601 format (YYYY-MM-DDThh:mm:ss)'),
-                        'timeend' => new \external_value(PARAM_TEXT,
-                                'End date and time of the event in UTC, ISO 8601 format (YYYY-MM-DDThh:mm:ss)'),
-                        'location' => new \external_value(PARAM_TEXT,
-                                'The location of the event'),
+                        'idnumber' => new \external_value(
+                            PARAM_ALPHANUMEXT,
+                            'Unique ID of this event. Existing events with this ID will be updated.'
+                        ),
+                        'groupidnumber' => new \external_value(
+                            PARAM_ALPHANUMEXT,
+                            'ID number of the group this event should display to.',
+                            VALUE_OPTIONAL
+                        ),
+                        'name' => new \external_value(
+                            PARAM_TEXT,
+                            'Event name'
+                        ),
+                        'courseshortname' => new \external_value(
+                            PARAM_TEXT,
+                            'Shortname of the course where this event should show.'
+                        ),
+                        'timestart' => new \external_value(
+                            PARAM_TEXT,
+                            'Start date and time of the event in UTC, ISO 8601 format (YYYY-MM-DDThh:mm:ss)'
+                        ),
+                        'timeend' => new \external_value(
+                            PARAM_TEXT,
+                            'End date and time of the event in UTC, ISO 8601 format (YYYY-MM-DDThh:mm:ss)'
+                        ),
+                        'location' => new \external_value(
+                            PARAM_TEXT,
+                            'The location of the event'
+                        ),
                     ], 'A single event.'),
                     'Events to be created or updated.'
-                )
+                ),
             ]
         );
     }
@@ -114,8 +128,11 @@ class import_events extends \external_api {
                 if ($courseid) {
                     $validcourses[$courseid] = $event['courseshortname'];
                 } else {
-                    $warnings[] = self::create_warning($key, 'invalidcourseshortname',
-                            $event['courseshortname']);
+                    $warnings[] = self::create_warning(
+                        $key,
+                        'invalidcourseshortname',
+                        $event['courseshortname']
+                    );
                     continue;
                 }
             }
@@ -157,13 +174,13 @@ class import_events extends \external_api {
                 'courseid' => $courseid,
                 'groupid' => $groupid,
                 'eventtype' => empty($groupid) ? 'course' : 'group',
-                'location' => $event['location']
+                'location' => $event['location'],
             ];
 
             // These fields uniquely identify the event and will not be changed by a future import.
             $params = [
                 'uuid' => $event['idnumber'],
-                'component' => self::EVENT_COMPONENT
+                'component' => self::EVENT_COMPONENT,
             ];
             $eventid = $DB->get_field('event', 'id', $params);
 
@@ -177,7 +194,6 @@ class import_events extends \external_api {
                 \calendar_event::create($calendardata, false);
                 $created++;
             }
-
         }
 
         return ['created' => $created, 'updated' => $updated, 'warnings' => $warnings];
@@ -202,7 +218,7 @@ class import_events extends \external_api {
      * @param string $time
      * @return array Any errors that were produced
      */
-    private static function parse_time(string $time) : \DateTime {
+    private static function parse_time(string $time): \DateTime {
         // WR416677: Force UTC as 'get_server_timezone_object' uses Moodle "timezone" config instead of server.
         $tz = new \DateTimeZone('UTC');
         $datetime = \DateTime::createFromFormat(self::DATE_FORMAT, $time, $tz);
@@ -231,7 +247,7 @@ class import_events extends \external_api {
             'item' => $value,
             'itemid' => $key,
             'warningcode' => $code,
-            'message' => get_string($code, 'mod_timetableevents', $a)
+            'message' => get_string($code, 'mod_timetableevents', $a),
         ];
     }
 }

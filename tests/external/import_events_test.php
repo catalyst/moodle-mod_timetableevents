@@ -30,7 +30,6 @@ namespace mod_timetableevents\external;
  * @covers \mod_timetableevents\external\import_events
  */
 class import_events_test extends \advanced_testcase {
-
     /**
      * @var array Generated entities.
      */
@@ -42,7 +41,7 @@ class import_events_test extends \advanced_testcase {
      * @return void
      * @throws \coding_exception
      */
-    public function setUp() : void {
+    public function setUp(): void {
         global $CFG;
         require_once($CFG->libdir . '/externallib.php');
         $this->resetAfterTest();
@@ -54,7 +53,8 @@ class import_events_test extends \advanced_testcase {
         $generator = $this->getDataGenerator();
         $this->generated['course'] = $generator->create_course(['shortname' => 'course123']);
         $this->generated['group'] = $generator->create_group(
-                ['courseid' => $this->generated['course']->id, 'idnumber' => 'group123']);
+            ['courseid' => $this->generated['course']->id, 'idnumber' => 'group123']
+        );
         $this->generated['event'] = $generator->create_event([
             'name' => 'Test event 1',
             'courseid' => $this->generated['course']->id,
@@ -64,7 +64,7 @@ class import_events_test extends \advanced_testcase {
             'timestart' => strtotime('1 hour'),
             'location' => '123 Fake Street',
             'timeduration' => HOURSECS,
-            'uuid' => 'f02089cd-4f35-488d-8656-0014ea79c801'
+            'uuid' => 'f02089cd-4f35-488d-8656-0014ea79c801',
         ]);
         $tz = \core_date::get_server_timezone_object();
         $this->generated['timestart'] = (new \DateTime('1 Day', $tz))->format(import_events::DATE_FORMAT);
@@ -76,7 +76,7 @@ class import_events_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_no_events() : void {
+    public function test_no_events(): void {
         $response = \external_api::call_external_function('mod_timetableevents_import_events', ['events' => []]);
         $this->assertFalse($response['error']);
         $this->assertEquals(0, $response['data']['created']);
@@ -89,7 +89,7 @@ class import_events_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_invalid_courseshortname() : void {
+    public function test_invalid_courseshortname(): void {
         $args = [
             'events' => [
                 [
@@ -99,8 +99,8 @@ class import_events_test extends \advanced_testcase {
                     'timestart' => $this->generated['timestart'],
                     'timeend' => $this->generated['timeend'],
                     'location' => '123 Fake Street',
-                ]
-            ]
+                ],
+            ],
         ];
         $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
@@ -111,7 +111,7 @@ class import_events_test extends \advanced_testcase {
             'item' => $args['events'][0]['courseshortname'],
             'itemid' => 0,
             'warningcode' => 'invalidcourseshortname',
-            'message' => get_string('invalidcourseshortname', 'mod_timetableevents')
+            'message' => get_string('invalidcourseshortname', 'mod_timetableevents'),
         ], $response['data']['warnings'][0]);
     }
 
@@ -120,7 +120,7 @@ class import_events_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_invalid_groupidnumber() : void {
+    public function test_invalid_groupidnumber(): void {
         $args = [
             'events' => [
                 [
@@ -131,8 +131,8 @@ class import_events_test extends \advanced_testcase {
                     'timestart' => $this->generated['timestart'],
                     'timeend' => $this->generated['timeend'],
                     'location' => '123 Fake Street',
-                ]
-            ]
+                ],
+            ],
         ];
         $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
@@ -143,7 +143,7 @@ class import_events_test extends \advanced_testcase {
             'item' => $args['events'][0]['groupidnumber'],
             'itemid' => 0,
             'warningcode' => 'invalidgroupidnumber',
-            'message' => get_string('invalidgroupidnumber', 'mod_timetableevents')
+            'message' => get_string('invalidgroupidnumber', 'mod_timetableevents'),
         ], $response['data']['warnings'][0]);
     }
 
@@ -152,7 +152,7 @@ class import_events_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_invalid_timestart() : void {
+    public function test_invalid_timestart(): void {
         $args = [
             'events' => [
                 [
@@ -163,8 +163,8 @@ class import_events_test extends \advanced_testcase {
                     'timestart' => '12pm 5/6/23',
                     'timeend' => $this->generated['timeend'],
                     'location' => '123 Fake Street',
-                ]
-            ]
+                ],
+            ],
         ];
         $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
@@ -176,7 +176,7 @@ class import_events_test extends \advanced_testcase {
             'item' => $args['events'][0]['timestart'],
             'itemid' => 0,
             'warningcode' => 'invalidtime',
-            'message' => get_string('invalidtime', 'mod_timetableevents', $messages)
+            'message' => get_string('invalidtime', 'mod_timetableevents', $messages),
         ], $response['data']['warnings'][0]);
     }
 
@@ -185,7 +185,7 @@ class import_events_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_invalid_timeend() : void {
+    public function test_invalid_timeend(): void {
         $args = [
             'events' => [
                 [
@@ -196,8 +196,8 @@ class import_events_test extends \advanced_testcase {
                     'timestart' => $this->generated['timestart'],
                     'timeend' => '1pm 5/6/23',
                     'location' => '123 Fake Street',
-                ]
-            ]
+                ],
+            ],
         ];
         $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
@@ -209,7 +209,7 @@ class import_events_test extends \advanced_testcase {
             'item' => $args['events'][0]['timeend'],
             'itemid' => 0,
             'warningcode' => 'invalidtime',
-            'message' => get_string('invalidtime', 'mod_timetableevents', $messages)
+            'message' => get_string('invalidtime', 'mod_timetableevents', $messages),
         ], $response['data']['warnings'][0]);
     }
 
@@ -218,7 +218,7 @@ class import_events_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_timeend_before_timestart() : void {
+    public function test_timeend_before_timestart(): void {
         $args = [
             'events' => [
                 [
@@ -229,8 +229,8 @@ class import_events_test extends \advanced_testcase {
                     'timestart' => $this->generated['timeend'],
                     'timeend' => $this->generated['timestart'],
                     'location' => '123 Fake Street',
-                ]
-            ]
+                ],
+            ],
         ];
         $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
@@ -242,7 +242,7 @@ class import_events_test extends \advanced_testcase {
                 'item' => $times,
                 'itemid' => 0,
                 'warningcode' => 'invalidtimeend',
-                'message' => get_string('invalidtimeend', 'mod_timetableevents')
+                'message' => get_string('invalidtimeend', 'mod_timetableevents'),
         ], $response['data']['warnings'][0]);
     }
 
@@ -251,7 +251,7 @@ class import_events_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_create_new_event() : void {
+    public function test_create_new_event(): void {
         global $DB;
         $args = [
             'events' => [
@@ -263,8 +263,8 @@ class import_events_test extends \advanced_testcase {
                     'timestart' => $this->generated['timestart'],
                     'timeend' => $this->generated['timeend'],
                     'location' => '345 Fake Street',
-                ]
-            ]
+                ],
+            ],
         ];
         $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
@@ -273,8 +273,12 @@ class import_events_test extends \advanced_testcase {
         $this->assertCount(0, $response['data']['warnings']);
 
         // Ensure the original event has not changed.
-        $originalevent = $DB->get_record('event', ['id' => $this->generated['event']->id],
-                'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location', MUST_EXIST);
+        $originalevent = $DB->get_record(
+            'event',
+            ['id' => $this->generated['event']->id],
+            'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location',
+            MUST_EXIST
+        );
         $expectedevent = (object)[
             'uuid' => $this->generated['event']->uuid,
             'name' => $this->generated['event']->name,
@@ -293,8 +297,12 @@ class import_events_test extends \advanced_testcase {
         $timestart = \DateTime::createFromFormat(import_events::DATE_FORMAT, $this->generated['timestart'], $tz);
         $timeend = \DateTime::createFromFormat(import_events::DATE_FORMAT, $this->generated['timeend'], $tz);
         $timeduration = $timeend->getTimestamp() - $timestart->getTimestamp();
-        $newevent = $DB->get_record('event', ['uuid' => $args['events'][0]['idnumber']],
-                'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location', MUST_EXIST);
+        $newevent = $DB->get_record(
+            'event',
+            ['uuid' => $args['events'][0]['idnumber']],
+            'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location',
+            MUST_EXIST
+        );
         $expectedevent = (object)[
             'uuid' => $args['events'][0]['idnumber'],
             'name' => $args['events'][0]['name'],
@@ -304,7 +312,7 @@ class import_events_test extends \advanced_testcase {
             'timeduration' => $timeduration,
             'eventtype' => 'group',
             'component' => import_events::EVENT_COMPONENT,
-            'location' => $args['events'][0]['location']
+            'location' => $args['events'][0]['location'],
         ];
         $this->assertEquals($expectedevent, $newevent);
     }
@@ -314,7 +322,7 @@ class import_events_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_update_existing_event() : void {
+    public function test_update_existing_event(): void {
         global $DB;
         $newcourse = $this->getDataGenerator()->create_course(['shortname' => 'course456']);
         $newgroup = $this->getDataGenerator()->create_group(['idnumber' => 'group456', 'courseid' => $newcourse->id]);
@@ -330,7 +338,7 @@ class import_events_test extends \advanced_testcase {
                     'timeend' => $this->generated['timeend'],
                     'location' => '345 Fake Street',
                 ],
-            ]
+            ],
         ];
         $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
@@ -343,8 +351,12 @@ class import_events_test extends \advanced_testcase {
         $timestart = \DateTime::createFromFormat(import_events::DATE_FORMAT, $this->generated['timestart'], $tz);
         $timeend = \DateTime::createFromFormat(import_events::DATE_FORMAT, $this->generated['timeend'], $tz);
         $timeduration = $timeend->getTimestamp() - $timestart->getTimestamp();
-        $originalevent = $DB->get_record('event', ['id' => $this->generated['event']->id],
-                'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location', MUST_EXIST);
+        $originalevent = $DB->get_record(
+            'event',
+            ['id' => $this->generated['event']->id],
+            'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location',
+            MUST_EXIST
+        );
         $expectedevent = (object)[
             'uuid' => $this->generated['event']->uuid,
             'name' => $args['events'][0]['name'],
@@ -367,7 +379,7 @@ class import_events_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_multiple_events() : void {
+    public function test_multiple_events(): void {
         global $DB;
         $generator = $this->getDataGenerator();
         $newevent = $generator->create_event([
@@ -379,7 +391,7 @@ class import_events_test extends \advanced_testcase {
             'timestart' => strtotime('2 hours'),
             'location' => '123 Fake Street',
             'timeduration' => HOURSECS,
-            'uuid' => '9480fb56-38a4-4501-80d9-52cfce7e6148'
+            'uuid' => '9480fb56-38a4-4501-80d9-52cfce7e6148',
         ]);
         $newcourse = $generator->create_course(['shortname' => 'course456']);
         $newgroup = $generator->create_group(['idnumber' => 'group456', 'courseid' => $newcourse->id]);
@@ -422,7 +434,7 @@ class import_events_test extends \advanced_testcase {
                     'timeend' => $this->generated['timeend'],
                     'location' => '345 Fake Street',
                 ],
-            ]
+            ],
         ];
         $response = \external_api::call_external_function('mod_timetableevents_import_events', $args);
         $this->assertFalse($response['error']);
@@ -431,8 +443,12 @@ class import_events_test extends \advanced_testcase {
         $this->assertCount(2, $response['data']['warnings']);
 
         // Check the original event has not changed.
-        $originalevent = $DB->get_record('event', ['id' => $this->generated['event']->id],
-                'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location', MUST_EXIST);
+        $originalevent = $DB->get_record(
+            'event',
+            ['id' => $this->generated['event']->id],
+            'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location',
+            MUST_EXIST
+        );
         $expectedevent = (object)[
                 'uuid' => $this->generated['event']->uuid,
                 'name' => $this->generated['event']->name,
@@ -451,8 +467,12 @@ class import_events_test extends \advanced_testcase {
         $timestart = \DateTime::createFromFormat(import_events::DATE_FORMAT, $this->generated['timestart'], $tz);
         $timeend = \DateTime::createFromFormat(import_events::DATE_FORMAT, $this->generated['timeend'], $tz);
         $timeduration = $timeend->getTimestamp() - $timestart->getTimestamp();
-        $modifiedevent = $DB->get_record('event', ['id' => $newevent->id],
-                'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location', MUST_EXIST);
+        $modifiedevent = $DB->get_record(
+            'event',
+            ['id' => $newevent->id],
+            'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location',
+            MUST_EXIST
+        );
         $expectedevent = (object)[
             'uuid' => $newevent->uuid,
             'name' => $newevent->name,
@@ -467,8 +487,12 @@ class import_events_test extends \advanced_testcase {
         $this->assertEquals($expectedevent, $modifiedevent);
 
         // Check that a third event was created.
-        $newevent = $DB->get_record('event', ['uuid' => $args['events'][1]['idnumber']],
-                'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location', MUST_EXIST);
+        $newevent = $DB->get_record(
+            'event',
+            ['uuid' => $args['events'][1]['idnumber']],
+            'uuid, name, courseid, groupid, timestart, timeduration, eventtype, component, location',
+            MUST_EXIST
+        );
         $expectedevent = (object)[
             'uuid' => $args['events'][1]['idnumber'],
             'name' => $args['events'][1]['name'],
@@ -494,14 +518,14 @@ class import_events_test extends \advanced_testcase {
                 'item' => $args['events'][2]['courseshortname'],
                 'itemid' => 2,
                 'warningcode' => 'invalidcourseshortname',
-                'message' => get_string('invalidcourseshortname', 'mod_timetableevents')
+                'message' => get_string('invalidcourseshortname', 'mod_timetableevents'),
             ],
             [
                 'item' => $args['events'][3]['timestart'],
                 'itemid' => 3,
                 'warningcode' => 'invalidtime',
-                'message' => get_string('invalidtime', 'mod_timetableevents', $messages)
-            ]
+                'message' => get_string('invalidtime', 'mod_timetableevents', $messages),
+            ],
         ];
         $this->assertEquals($expectedwarnings, $response['data']['warnings']);
     }
@@ -511,7 +535,7 @@ class import_events_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_import_without_capability() : void {
+    public function test_import_without_capability(): void {
         $generator = $this->getDataGenerator();
         $user = $generator->create_user();
         $this->setUser($user->id);
@@ -529,7 +553,7 @@ class import_events_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_import_with_capability() : void {
+    public function test_import_with_capability(): void {
         $generator = $this->getDataGenerator();
         $user = $generator->create_user();
         $roleid = $generator->create_role();

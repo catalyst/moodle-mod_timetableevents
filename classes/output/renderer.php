@@ -29,7 +29,6 @@ namespace mod_timetableevents\output;
  * Render methods for timetable events.
  */
 class renderer extends \plugin_renderer_base {
-
     /**
      * Basic renderer for the location templatable.
      *
@@ -39,7 +38,7 @@ class renderer extends \plugin_renderer_base {
      * @return string
      * @throws \moodle_exception
      */
-    public function render_location(\templatable $location) : string {
+    public function render_location(\templatable $location): string {
         return $this->render_from_template('mod_timetableevents/location', $location->export_for_template($this->output));
     }
 
@@ -51,7 +50,7 @@ class renderer extends \plugin_renderer_base {
      * @return string
      * @throws \moodle_exception
      */
-    public function render_display(\templatable $display) : string {
+    public function render_display(\templatable $display): string {
         return $this->render_from_template('mod_timetableevents/display', $display->export_for_template($this->output));
     }
 }

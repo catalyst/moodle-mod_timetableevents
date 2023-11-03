@@ -31,7 +31,6 @@ use stdClass;
  * @group timetableevents
  */
 class data_manager_test extends \advanced_testcase {
-
     /**
      * Set up the test data.
      */
@@ -77,7 +76,6 @@ class data_manager_test extends \advanced_testcase {
 
         // Create events.
         $this->create_events($intervals);
-
     }
 
     /**
@@ -89,53 +87,69 @@ class data_manager_test extends \advanced_testcase {
      * Session 3 cm 5 section 9 Term 2 start 31/10/22
      * Reading week (1 week) cm 6 section 10
      */
-    public function provider_fortnightly_sections(): array {
-        return array(
-            array(1, [
-                'testgroupfortnightly1rangestart' => '2022/09/12, 00:00',
-                'testgroupfortnightly1rangeend' => '2022/09/25, 23:59',
-                'testgroupfortnightly2rangestart' => '2022/09/13, 00:00',
-                'testgroupfortnightly2rangeend' => '2022/09/26, 23:59',
-                'testgroupfortnightly1eventstart' => '12/09/22, 17:00',
-                'testgroupfortnightly1eventend' => '18:00',
-                'testgroupfortnightly1count' => '5',
-                'testgroupfortnightly2eventstart' => '13/09/22, 17:00',
-                'testgroupfortnightly2eventend' => '18:00',
-                'testgroupfortnightly2count' => '5']),
-            array(3, [
-                'testgroupfortnightly1rangestart' => '2022/09/26, 00:00',
-                'testgroupfortnightly1rangeend' => '2022/10/09, 23:59',
-                'testgroupfortnightly2rangestart' => '2022/09/27, 00:00',
-                'testgroupfortnightly2rangeend' => '2022/10/10, 23:59',
-                'testgroupfortnightly1eventstart' => '28/09/22, 17:00',
-                'testgroupfortnightly1eventend' => '18:00',
-                'testgroupfortnightly1count' => '2',
-                'testgroupfortnightly2eventstart' => '1/10/22, 18:00',
-                'testgroupfortnightly2eventend' => '19:00',
-                'testgroupfortnightly2count' => '2']),
-            array(5, [
-                'testgroupfortnightly1rangestart' => '2022/10/10, 00:00',
-                'testgroupfortnightly1rangeend' => '2022/10/16, 23:59',
-                'testgroupfortnightly2rangestart' => '2022/10/11, 00:00',
-                'testgroupfortnightly2rangeend' => '2022/10/16, 23:59',
-                'testgroupfortnightly1eventstart' => '12/10/22, 17:00',
-                'testgroupfortnightly1eventend' => '18:00',
-                'testgroupfortnightly1count' => '1',
-                'testgroupfortnightly2eventstart' => '15/10/22, 17:00',
-                'testgroupfortnightly2eventend' => '18:00',
-                'testgroupfortnightly2count' => '1']),
-            array(6, [
-                'testgroupfortnightly1rangestart' => '2022/10/31, 00:00',
-                'testgroupfortnightly1rangeend' => '2022/11/06, 23:59',
-                'testgroupfortnightly2rangestart' => '2022/10/31, 00:00',
-                'testgroupfortnightly2rangeend' => '2022/11/06, 23:59',
-                'testgroupfortnightly1eventstart' => '31/10/22, 18:00',
-                'testgroupfortnightly1eventend' => '19:00',
-                'testgroupfortnightly1count' => '1',
-                'testgroupfortnightly2eventstart' => '3/11/22, 18:00',
-                'testgroupfortnightly2eventend' => '19:00',
-                'testgroupfortnightly2count' => '1']),
-        );
+    public static function provider_fortnightly_sections(): array {
+        return [
+            [
+                1,
+                [
+                    'testgroupfortnightly1rangestart' => '2022/09/12, 00:00',
+                    'testgroupfortnightly1rangeend' => '2022/09/25, 23:59',
+                    'testgroupfortnightly2rangestart' => '2022/09/13, 00:00',
+                    'testgroupfortnightly2rangeend' => '2022/09/26, 23:59',
+                    'testgroupfortnightly1eventstart' => '12/09/22, 17:00',
+                    'testgroupfortnightly1eventend' => '18:00',
+                    'testgroupfortnightly1count' => '5',
+                    'testgroupfortnightly2eventstart' => '13/09/22, 17:00',
+                    'testgroupfortnightly2eventend' => '18:00',
+                    'testgroupfortnightly2count' => '5',
+                ],
+            ],
+            [
+                3,
+                [
+                    'testgroupfortnightly1rangestart' => '2022/09/26, 00:00',
+                    'testgroupfortnightly1rangeend' => '2022/10/09, 23:59',
+                    'testgroupfortnightly2rangestart' => '2022/09/27, 00:00',
+                    'testgroupfortnightly2rangeend' => '2022/10/10, 23:59',
+                    'testgroupfortnightly1eventstart' => '28/09/22, 17:00',
+                    'testgroupfortnightly1eventend' => '18:00',
+                    'testgroupfortnightly1count' => '2',
+                    'testgroupfortnightly2eventstart' => '1/10/22, 18:00',
+                    'testgroupfortnightly2eventend' => '19:00',
+                    'testgroupfortnightly2count' => '2',
+                ],
+            ],
+            [
+                5,
+                [
+                    'testgroupfortnightly1rangestart' => '2022/10/10, 00:00',
+                    'testgroupfortnightly1rangeend' => '2022/10/16, 23:59',
+                    'testgroupfortnightly2rangestart' => '2022/10/11, 00:00',
+                    'testgroupfortnightly2rangeend' => '2022/10/16, 23:59',
+                    'testgroupfortnightly1eventstart' => '12/10/22, 17:00',
+                    'testgroupfortnightly1eventend' => '18:00',
+                    'testgroupfortnightly1count' => '1',
+                    'testgroupfortnightly2eventstart' => '15/10/22, 17:00',
+                    'testgroupfortnightly2eventend' => '18:00',
+                    'testgroupfortnightly2count' => '1',
+                ],
+            ],
+            [
+                6,
+                [
+                    'testgroupfortnightly1rangestart' => '2022/10/31, 00:00',
+                    'testgroupfortnightly1rangeend' => '2022/11/06, 23:59',
+                    'testgroupfortnightly2rangestart' => '2022/10/31, 00:00',
+                    'testgroupfortnightly2rangeend' => '2022/11/06, 23:59',
+                    'testgroupfortnightly1eventstart' => '31/10/22, 18:00',
+                    'testgroupfortnightly1eventend' => '19:00',
+                    'testgroupfortnightly1count' => '1',
+                    'testgroupfortnightly2eventstart' => '3/11/22, 18:00',
+                    'testgroupfortnightly2eventend' => '19:00',
+                    'testgroupfortnightly2count' => '1',
+                ],
+            ],
+        ];
     }
 
     /**
@@ -144,9 +158,9 @@ class data_manager_test extends \advanced_testcase {
      * @param array $expectedresult
      * @dataProvider provider_fortnightly_sections
      */
-    public function test_daterange_and_events_for_fortnightly_sections(int $cmid, array $expectedresult) {
+    public function test_daterange_and_events_for_fortnightly_sections(int $cmid, array $expectedresult): void {
         global $DB;
-        $cm = 'testcoursefortnightlycm'. $cmid;
+        $cm = 'testcoursefortnightlycm' . $cmid;
 
         $context = \context_module::instance($this->{$cm}->id);
         $cminfo = get_course_and_cm_from_cmid($this->{$cm}->id);
@@ -184,53 +198,69 @@ class data_manager_test extends \advanced_testcase {
      * Session 3 cm 5 section 12 Term 2 start 31/10/22
      * Excluded cm 4 section 13
      */
-    public function provider_weekly_sections(): array {
-        return array(
-            array(1, [
-                'testgroupweekly1rangestart' => '2022/09/12, 00:00',
-                'testgroupweekly1rangeend' => '2022/09/18, 23:59',
-                'testgroupweekly2rangestart' => '2022/09/13, 00:00',
-                'testgroupweekly2rangeend' => '2022/09/19, 23:59',
-                'testgroupweekly1eventstart' => '12/09/22, 17:00',
-                'testgroupweekly1eventend' => '18:00',
-                'testgroupweekly1count' => '4',
-                'testgroupweekly2eventstart' => '13/09/22, 17:00',
-                'testgroupweekly2eventend' => '18:00',
-                'testgroupweekly2count' => '4']),
-            array(3, [
-                'testgroupweekly1rangestart' => '2022/09/19, 00:00',
-                'testgroupweekly1rangeend' => '2022/09/25, 23:59',
-                'testgroupweekly2rangestart' => '2022/09/20, 00:00',
-                'testgroupweekly2rangeend' => '2022/09/26, 23:59',
-                'testgroupweekly1eventstart' => '20/09/22, 17:00',
-                'testgroupweekly1eventend' => '19:00',
-                'testgroupweekly1count' => '1',
-                'testgroupweekly2eventstart' => '22/09/22, 17:00',
-                'testgroupweekly2eventend' => '18:00',
-                'testgroupweekly2count' => '1']),
-            array(5, [
-                'testgroupweekly1rangestart' => '2022/09/26, 00:00',
-                'testgroupweekly1rangeend' => '2022/10/02, 23:59',
-                'testgroupweekly2rangestart' => '2022/09/27, 00:00',
-                'testgroupweekly2rangeend' => '2022/10/03, 23:59',
-                'testgroupweekly1eventstart' => '28/09/22, 17:00',
-                'testgroupweekly1eventend' => '18:00',
-                'testgroupweekly1count' => '1',
-                'testgroupweekly2eventstart' => '1/10/22, 18:00',
-                'testgroupweekly2eventend' => '19:00',
-                'testgroupweekly2count' => '1']),
-            array(6, [
-                'testgroupweekly1rangestart' => '2022/10/03, 00:00',
-                'testgroupweekly1rangeend' => '2022/10/09, 23:59',
-                'testgroupweekly2rangestart' => '2022/10/04, 00:00',
-                'testgroupweekly2rangeend' => '2022/10/10, 23:59',
-                'testgroupweekly1eventstart' => '5/10/22, 17:00',
-                'testgroupweekly1eventend' => '18:00',
-                'testgroupweekly1count' => '1',
-                'testgroupweekly2eventstart' => '7/10/22, 18:00',
-                'testgroupweekly2eventend' => '19:00',
-                'testgroupweekly2count' => '1']),
-        );
+    public static function provider_weekly_sections(): array {
+        return [
+            [
+                1,
+                [
+                    'testgroupweekly1rangestart' => '2022/09/12, 00:00',
+                    'testgroupweekly1rangeend' => '2022/09/18, 23:59',
+                    'testgroupweekly2rangestart' => '2022/09/13, 00:00',
+                    'testgroupweekly2rangeend' => '2022/09/19, 23:59',
+                    'testgroupweekly1eventstart' => '12/09/22, 17:00',
+                    'testgroupweekly1eventend' => '18:00',
+                    'testgroupweekly1count' => '4',
+                    'testgroupweekly2eventstart' => '13/09/22, 17:00',
+                    'testgroupweekly2eventend' => '18:00',
+                    'testgroupweekly2count' => '4',
+                ],
+            ],
+            [
+                3,
+                [
+                    'testgroupweekly1rangestart' => '2022/09/19, 00:00',
+                    'testgroupweekly1rangeend' => '2022/09/25, 23:59',
+                    'testgroupweekly2rangestart' => '2022/09/20, 00:00',
+                    'testgroupweekly2rangeend' => '2022/09/26, 23:59',
+                    'testgroupweekly1eventstart' => '20/09/22, 17:00',
+                    'testgroupweekly1eventend' => '19:00',
+                    'testgroupweekly1count' => '1',
+                    'testgroupweekly2eventstart' => '22/09/22, 17:00',
+                    'testgroupweekly2eventend' => '18:00',
+                    'testgroupweekly2count' => '1',
+                ],
+            ],
+            [
+                5,
+                [
+                    'testgroupweekly1rangestart' => '2022/09/26, 00:00',
+                    'testgroupweekly1rangeend' => '2022/10/02, 23:59',
+                    'testgroupweekly2rangestart' => '2022/09/27, 00:00',
+                    'testgroupweekly2rangeend' => '2022/10/03, 23:59',
+                    'testgroupweekly1eventstart' => '28/09/22, 17:00',
+                    'testgroupweekly1eventend' => '18:00',
+                    'testgroupweekly1count' => '1',
+                    'testgroupweekly2eventstart' => '1/10/22, 18:00',
+                    'testgroupweekly2eventend' => '19:00',
+                    'testgroupweekly2count' => '1',
+                ],
+            ],
+            [
+                6,
+                [
+                    'testgroupweekly1rangestart' => '2022/10/03, 00:00',
+                    'testgroupweekly1rangeend' => '2022/10/09, 23:59',
+                    'testgroupweekly2rangestart' => '2022/10/04, 00:00',
+                    'testgroupweekly2rangeend' => '2022/10/10, 23:59',
+                    'testgroupweekly1eventstart' => '5/10/22, 17:00',
+                    'testgroupweekly1eventend' => '18:00',
+                    'testgroupweekly1count' => '1',
+                    'testgroupweekly2eventstart' => '7/10/22, 18:00',
+                    'testgroupweekly2eventend' => '19:00',
+                    'testgroupweekly2count' => '1',
+                ],
+            ],
+        ];
     }
 
     /**
@@ -239,9 +269,9 @@ class data_manager_test extends \advanced_testcase {
      * @param array $expectedresult
      * @dataProvider provider_weekly_sections
      */
-    public function test_daterange_and_events_for_weekly_sections(int $cmid, array $expectedresult) {
+    public function test_daterange_and_events_for_weekly_sections(int $cmid, array $expectedresult): void {
         global $DB;
-        $cm = 'testcourseweeklycm'. $cmid;
+        $cm = 'testcourseweeklycm' . $cmid;
 
         $context = \context_module::instance($this->{$cm}->id);
         $cminfo = get_course_and_cm_from_cmid($this->{$cm}->id);
@@ -273,53 +303,69 @@ class data_manager_test extends \advanced_testcase {
      * Data provider for test_daterange_and_events_for_daily_sections.
      * Excluded - cm 2 (section 6), cm 4 (section 8).
      */
-    public function provider_daily_sections(): array {
-        return array(
-            array(1, [
-                'testgroupdaily1rangestart' => '2022/09/12, 00:00',
-                'testgroupdaily1rangeend' => '2022/09/12, 23:59',
-                'testgroupdaily2rangestart' => '2022/09/13, 00:00',
-                'testgroupdaily2rangeend' => '2022/09/13, 23:59',
-                'testgroupdaily1eventstart' => '12/09/22, 17:00',
-                'testgroupdaily1eventend' => '18:00',
-                'testgroupdaily1count' => '1',
-                'testgroupdaily2eventstart' => '13/09/22, 17:00',
-                'testgroupdaily2eventend' => '18:00',
-                'testgroupdaily2count' => '1']),
-            array(3, [
-                'testgroupdaily1rangestart' => '2022/09/13, 00:00',
-                'testgroupdaily1rangeend' => '2022/09/13, 23:59',
-                'testgroupdaily2rangestart' => '2022/09/14, 00:00',
-                'testgroupdaily2rangeend' => '2022/09/14, 23:59',
-                'testgroupdaily1eventstart' => '13/09/22, 16:00',
-                'testgroupdaily1eventend' => '17:00',
-                'testgroupdaily1count' => '1',
-                'testgroupdaily2eventstart' => '14/09/22, 18:00',
-                'testgroupdaily2eventend' => '20:00',
-                'testgroupdaily2count' => '1']),
-            array(5, [
-                'testgroupdaily1rangestart' => '2022/09/14, 00:00',
-                'testgroupdaily1rangeend' => '2022/09/14, 23:59',
-                'testgroupdaily2rangestart' => '2022/09/15, 00:00',
-                'testgroupdaily2rangeend' => '2022/09/15, 23:59',
-                'testgroupdaily1eventstart' => '14/09/22, 17:00',
-                'testgroupdaily1eventend' => '19:00',
-                'testgroupdaily1count' => '1',
-                'testgroupdaily2eventstart' => '15/09/22, 17:00',
-                'testgroupdaily2eventend' => '19:00',
-                'testgroupdaily2count' => '1']),
-            array(6, [
-                'testgroupdaily1rangestart' => '2022/09/15, 00:00',
-                'testgroupdaily1rangeend' => '2022/09/15, 23:59',
-                'testgroupdaily2rangestart' => '2022/09/16, 00:00',
-                'testgroupdaily2rangeend' => '2022/09/16, 23:59',
-                'testgroupdaily1eventstart' => '15/09/22, 16:00',
-                'testgroupdaily1eventend' => '18:00',
-                'testgroupdaily1count' => '1',
-                'testgroupdaily2eventstart' => '16/09/22, 17:00',
-                'testgroupdaily2eventend' => '19:00',
-                'testgroupdaily2count' => '1']),
-        );
+    public static function provider_daily_sections(): array {
+        return [
+            [
+                1,
+                [
+                    'testgroupdaily1rangestart' => '2022/09/12, 00:00',
+                    'testgroupdaily1rangeend' => '2022/09/12, 23:59',
+                    'testgroupdaily2rangestart' => '2022/09/13, 00:00',
+                    'testgroupdaily2rangeend' => '2022/09/13, 23:59',
+                    'testgroupdaily1eventstart' => '12/09/22, 17:00',
+                    'testgroupdaily1eventend' => '18:00',
+                    'testgroupdaily1count' => '1',
+                    'testgroupdaily2eventstart' => '13/09/22, 17:00',
+                    'testgroupdaily2eventend' => '18:00',
+                    'testgroupdaily2count' => '1',
+                ],
+            ],
+            [
+                3,
+                [
+                    'testgroupdaily1rangestart' => '2022/09/13, 00:00',
+                    'testgroupdaily1rangeend' => '2022/09/13, 23:59',
+                    'testgroupdaily2rangestart' => '2022/09/14, 00:00',
+                    'testgroupdaily2rangeend' => '2022/09/14, 23:59',
+                    'testgroupdaily1eventstart' => '13/09/22, 16:00',
+                    'testgroupdaily1eventend' => '17:00',
+                    'testgroupdaily1count' => '1',
+                    'testgroupdaily2eventstart' => '14/09/22, 18:00',
+                    'testgroupdaily2eventend' => '20:00',
+                    'testgroupdaily2count' => '1',
+                ],
+            ],
+            [
+                5,
+                [
+                    'testgroupdaily1rangestart' => '2022/09/14, 00:00',
+                    'testgroupdaily1rangeend' => '2022/09/14, 23:59',
+                    'testgroupdaily2rangestart' => '2022/09/15, 00:00',
+                    'testgroupdaily2rangeend' => '2022/09/15, 23:59',
+                    'testgroupdaily1eventstart' => '14/09/22, 17:00',
+                    'testgroupdaily1eventend' => '19:00',
+                    'testgroupdaily1count' => '1',
+                    'testgroupdaily2eventstart' => '15/09/22, 17:00',
+                    'testgroupdaily2eventend' => '19:00',
+                    'testgroupdaily2count' => '1',
+                ],
+            ],
+            [
+                6,
+                [
+                    'testgroupdaily1rangestart' => '2022/09/15, 00:00',
+                    'testgroupdaily1rangeend' => '2022/09/15, 23:59',
+                    'testgroupdaily2rangestart' => '2022/09/16, 00:00',
+                    'testgroupdaily2rangeend' => '2022/09/16, 23:59',
+                    'testgroupdaily1eventstart' => '15/09/22, 16:00',
+                    'testgroupdaily1eventend' => '18:00',
+                    'testgroupdaily1count' => '1',
+                    'testgroupdaily2eventstart' => '16/09/22, 17:00',
+                    'testgroupdaily2eventend' => '19:00',
+                    'testgroupdaily2count' => '1',
+                ],
+            ],
+        ];
     }
 
     /**
@@ -328,9 +374,9 @@ class data_manager_test extends \advanced_testcase {
      * @param array $expectedresult
      * @dataProvider provider_daily_sections
      */
-    public function test_daterange_and_events_for_daily_sections(int $cmid, array $expectedresult) {
+    public function test_daterange_and_events_for_daily_sections(int $cmid, array $expectedresult): void {
         global $DB;
-        $cm = 'testcoursedailycm'. $cmid;
+        $cm = 'testcoursedailycm' . $cmid;
         $context = \context_module::instance($this->{$cm}->id);
         $cminfo = get_course_and_cm_from_cmid($this->{$cm}->id);
 
@@ -366,7 +412,6 @@ class data_manager_test extends \advanced_testcase {
         global $DB;
 
         foreach ($intervals as $intervalkey => $interval) {
-
             $course = 'testcourse' . $interval;
 
             $this->$course = $this->getDataGenerator()->create_course(['numsections' => 20], ['createsections' => true]);
@@ -431,8 +476,8 @@ class data_manager_test extends \advanced_testcase {
     public function create_groups(array $intervals): void {
         global $DB;
         foreach ($intervals as $interval) {
-            $course = 'testcourse'. $interval;
-            $courseconfig = 'testcourse'. $interval . 'courseconfig';
+            $course = 'testcourse' . $interval;
+            $courseconfig = 'testcourse' . $interval . 'courseconfig';
             $courseconfig = $this->$courseconfig;
             $teachingstartdate = $courseconfig->teachingstartdate;
             for ($x = 1; $x <= 2; $x++) {
@@ -458,39 +503,50 @@ class data_manager_test extends \advanced_testcase {
     public function create_modules(array $intervals): void {
 
         foreach ($intervals as $interval) {
-
             $course = 'testcourse' . $interval;
             $module = $course;
 
-            $module1 = $this->getDataGenerator()->create_module('timetableevents',
-                ['course' => $this->$course->id, 'section' => 5]);
+            $module1 = $this->getDataGenerator()->create_module(
+                'timetableevents',
+                ['course' => $this->$course->id, 'section' => 5]
+            );
             $module .= 'cm1';
             $this->$module = get_coursemodule_from_id('timetableevents', $module1->cmid);
 
             // Excluded.
-            $module2 = $this->getDataGenerator()->create_module('timetableevents',
-                ['course' => $this->$course->id, 'section' => 6]);
+            $module2 = $this->getDataGenerator()->create_module(
+                'timetableevents',
+                ['course' => $this->$course->id, 'section' => 6]
+            );
             $module = substr_replace($module, 'cm2', -3);
             $this->$module = get_coursemodule_from_id('timetableevents', $module2->cmid);
 
-            $module3 = $this->getDataGenerator()->create_module('timetableevents',
-                ['course' => $this->$course->id, 'section' => 7]);
+            $module3 = $this->getDataGenerator()->create_module(
+                'timetableevents',
+                ['course' => $this->$course->id, 'section' => 7]
+            );
             $module = substr_replace($module, 'cm3', -3);
             $this->$module = get_coursemodule_from_id('timetableevents', $module3->cmid);
             // Excluded.
-            $module4 = $this->getDataGenerator()->create_module('timetableevents',
-                ['course' => $this->$course->id, 'section' => 8]);
+            $module4 = $this->getDataGenerator()->create_module(
+                'timetableevents',
+                ['course' => $this->$course->id, 'section' => 8]
+            );
             $module = substr_replace($module, 'cm4', -3);
             $this->$module = get_coursemodule_from_id('timetableevents', $module4->cmid);
 
-            $module5 = $this->getDataGenerator()->create_module('timetableevents',
-                ['course' => $this->$course->id, 'section' => 9]);
+            $module5 = $this->getDataGenerator()->create_module(
+                'timetableevents',
+                ['course' => $this->$course->id, 'section' => 9]
+            );
             $module = substr_replace($module, 'cm5', -3);
             $this->$module = get_coursemodule_from_id('timetableevents', $module5->cmid);
 
             // Reading week.
-            $module6 = $this->getDataGenerator()->create_module('timetableevents',
-                ['course' => $this->$course->id, 'section' => 10]);
+            $module6 = $this->getDataGenerator()->create_module(
+                'timetableevents',
+                ['course' => $this->$course->id, 'section' => 10]
+            );
             $module = substr_replace($module, 'cm6', -3);
             $this->$module = get_coursemodule_from_id('timetableevents', $module6->cmid);
         }
@@ -520,7 +576,6 @@ class data_manager_test extends \advanced_testcase {
         $events = json_decode($events);
 
         foreach ($intervals as $interval) {
-
             $course = 'testcourse' . $interval;
 
             foreach ($events as $event) {

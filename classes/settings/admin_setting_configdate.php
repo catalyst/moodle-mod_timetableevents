@@ -33,7 +33,6 @@ use mod_timetableevents\data_manager;
  * An admin setting for a date input.
  */
 class admin_setting_configdate extends admin_setting_configtext {
-
     /**
      * Save a setting
      *
@@ -66,7 +65,6 @@ class admin_setting_configdate extends admin_setting_configtext {
         }
 
         return true;
-
     }
 
     /**
@@ -103,7 +101,6 @@ class admin_setting_configdate extends admin_setting_configtext {
                     $startdate = \DateTime::createFromFormat('U', $terms[0]->startdate);
                     $startdate = date('Y-m-d', $startdate->getTimestamp());
                     $context->value = $startdate;
-
                 }
             }
         } else {
@@ -115,7 +112,5 @@ class admin_setting_configdate extends admin_setting_configtext {
         $element = $OUTPUT->render_from_template('mod_timetableevents/configdate', $context);
 
         return format_admin_setting($this, $this->visiblename, $element, $this->description, true, '', $default, $query);
-
     }
-
 }

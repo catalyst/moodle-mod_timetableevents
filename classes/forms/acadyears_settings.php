@@ -30,8 +30,8 @@ use moodleform;
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once($CFG->libdir. '/formslib.php');
-require_once($CFG->dirroot.'/mod/timetableevents/lib.php');
+require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->dirroot . '/mod/timetableevents/lib.php');
 
 /**
  * Form class for academic years settings.
@@ -42,7 +42,6 @@ require_once($CFG->dirroot.'/mod/timetableevents/lib.php');
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class acadyears_settings extends moodleform {
-
     /**
      * Form definition.
      */
@@ -56,10 +55,16 @@ class acadyears_settings extends moodleform {
         $mform->setType('yearid', PARAM_INT);
 
         $repeatarray = [
-            $mform->createElement('date_selector', 'startdate',
-                get_string('pluginsettings:acadyears:termstart', 'timetableevents')),
-            $mform->createElement('date_selector', 'enddate',
-                get_string('pluginsettings:acadyears:termend', 'timetableevents')),
+            $mform->createElement(
+                'date_selector',
+                'startdate',
+                get_string('pluginsettings:acadyears:termstart', 'timetableevents')
+            ),
+            $mform->createElement(
+                'date_selector',
+                'enddate',
+                get_string('pluginsettings:acadyears:termend', 'timetableevents')
+            ),
             $mform->createElement('hidden', 'termid', 0),
         ];
 
@@ -100,7 +105,6 @@ class acadyears_settings extends moodleform {
         }
 
         $this->add_action_buttons();
-
     }
 
     // phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameUnderscore
@@ -116,9 +120,9 @@ class acadyears_settings extends moodleform {
             $terms = array_values($default_values);
 
             foreach (array_keys($termids) as $key) {
-                $values['startdate['.$key.']'] = $terms[$key]->startdate;
-                $values['enddate['.$key.']'] = $terms[$key]->enddate;
-                $values['termid['.$key.']'] = $termids[$key];
+                $values['startdate[' . $key . ']'] = $terms[$key]->startdate;
+                $values['enddate[' . $key . ']'] = $terms[$key]->enddate;
+                $values['termid[' . $key . ']'] = $termids[$key];
                 $values['name'] = $terms[$key]->yearname;
                 $values['yearid'] = $terms[$key]->yearid;
             }
@@ -126,29 +130,27 @@ class acadyears_settings extends moodleform {
         }
 
         return null;
-
     }
     // phpcs:enable
 
-    function validation($data, $files) {
-        $errors = array();
+    public function validation($data, $files) {
+        $errors = [];
         foreach ($data['enddate'] as $key => $enddate) {
             $nextkey = $key + 1;
 
             // Start date of term must be after end date of previous term.
             if (array_key_exists($nextkey, $data['startdate'])) {
                 if ($data['startdate'][$nextkey] <= $enddate) {
-                    $errors['startdate[' . $nextkey .']'] = "Start date of term must be after end date of previous term.";
+                    $errors['startdate[' . $nextkey . ']'] = "Start date of term must be after end date of previous term.";
                 }
             }
 
             // End date of term must be after start date of term.
             if ($data['enddate'][$key] <= $data['startdate'][$key]) {
-                $errors['enddate[' . $key .']'] = "End date of term must be after start date of term.";
+                $errors['enddate[' . $key . ']'] = "End date of term must be after start date of term.";
             }
         }
 
         return $errors;
     }
-
 }

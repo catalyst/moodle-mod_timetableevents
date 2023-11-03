@@ -34,7 +34,6 @@ use mod_timetableevents\output\config_acadyears;
  * An admin setting for selecting and editing academic year and term dates.
  */
 class admin_setting_configacadyear extends admin_setting {
-
     /**
      * Return the HTML output for the field.
      *
@@ -55,7 +54,6 @@ class admin_setting_configacadyear extends admin_setting {
         $element = $OUTPUT->render_from_template('mod_timetableevents/acadyears', $context);
 
         return format_admin_setting($this, $this->visiblename, $element, $this->description, true, '', $default, $query);
-
     }
 
     /**

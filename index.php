@@ -28,10 +28,10 @@ require_once("lib.php");
 
 $id = required_param('id', PARAM_INT);   // Course.
 
-$PAGE->set_url('/mod/timetableevents/index.php', array('id' => $id));
+$PAGE->set_url('/mod/timetableevents/index.php', ['id' => $id]);
 
 if (!empty($id)) {
-    if (!$course = $DB->get_record('course', array('id' => $id))) {
+    if (!$course = $DB->get_record('course', ['id' => $id])) {
         moodle_exception('invalidcourseid');
     }
 } else {
@@ -70,12 +70,12 @@ if (! $timetableevents = get_all_instances_in_course("timetableevents", $course)
 $table = new html_table();
 
 if ($usesections) {
-    $strsectionname = get_string('sectionname', 'format_'.$course->format);
-    $table->head  = array ($strsectionname, $strname, $strsummary, $strsection);
-    $table->align = array ("center", "left", "left", "left");
+    $strsectionname = get_string('sectionname', 'format_' . $course->format);
+    $table->head  = [$strsectionname, $strname, $strsummary, $strsection];
+    $table->align = ["center", "left", "left", "left"];
 } else {
-    $table->head  = array ($strlastmodified, $strname, $strsummary, $strsection);
-    $table->align = array ("left", "left", "left", "left");
+    $table->head  = [$strlastmodified, $strname, $strsummary, $strsection];
+    $table->align = ["left", "left", "left", "left"];
 }
 
 foreach ($timetableevents as $timetableevent) {
@@ -91,18 +91,26 @@ foreach ($timetableevents as $timetableevent) {
     $report = '&nbsp;';
     $reportshow = '&nbsp;';
 
-    $options = (object)array('noclean' => true);
+    $options = (object)['noclean' => true];
     if (!$timetableevent->visible) {
         // Show dimmed if the mod is hidden.
-        $table->data[] = array ($tt, html_writer::link('view.php?id='.$timetableevent->coursemodule,
-            format_string($timetableevent->name),
-            array('class' => 'dimmed')),
-            format_module_intro('timetableevents', $timetableevent, $timetableevent->coursemodule), $reportshow);
+        $table->data[] = [
+            $tt,
+            html_writer::link(
+                'view.php?id=' . $timetableevent->coursemodule,
+                format_string($timetableevent->name),
+                ['class' => 'dimmed']
+            ),
+            format_module_intro('timetableevents', $timetableevent, $timetableevent->coursemodule),
+            $reportshow,
+        ];
     } else {
         // Show normal if the mod is visible.
-        $table->data[] = array ($tt, html_writer::link(
-            'view.php?id='.$timetableevent->coursemodule, format_string($timetableevent->name)),
-            format_module_intro('timetableevents', $timetableevent, $timetableevent->coursemodule), $reportshow);
+        $table->data[] = [$tt, html_writer::link(
+            'view.php?id=' . $timetableevent->coursemodule,
+            format_string($timetableevent->name)
+        ),
+            format_module_intro('timetableevents', $timetableevent, $timetableevent->coursemodule), $reportshow, ];
     }
 }
 
@@ -111,5 +119,3 @@ echo html_writer::empty_tag('br');
 echo html_writer::table($table);
 
 echo $OUTPUT->footer();
-
-

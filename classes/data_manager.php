@@ -34,7 +34,6 @@ use stdClass;
  * Class for data management.
  */
 class data_manager {
-
     /**
      * Override values.
      *
@@ -108,11 +107,12 @@ class data_manager {
         global $DB;
         // Get all course sections.
         $sections = $DB->get_records_sql(
-                "SELECT cs.id AS sectionid, cs.section, ts.id, ts.excluded, ts.readingweek
-                   FROM {course_sections} cs
-                   JOIN {course} c ON c.id = cs.course
-              LEFT JOIN {timetableevents_section} ts ON ts.sectionid = cs.id
-                  WHERE cs.course = ?", [$data->course]
+            "SELECT cs.id AS sectionid, cs.section, ts.id, ts.excluded, ts.readingweek
+               FROM {course_sections} cs
+               JOIN {course} c ON c.id = cs.course
+          LEFT JOIN {timetableevents_section} ts ON ts.sectionid = cs.id
+              WHERE cs.course = ?",
+            [$data->course]
         );
 
         $sectionobjs = [];
@@ -124,9 +124,10 @@ class data_manager {
                 $sectionobj->sectionid = $section->sectionid;
 
                 // If the section appears in either included or readinglist array.
-                if (in_array($section->sectionid, $data->excluded) ||
-                    in_array($section->sectionid, $data->readingweek)) {
-
+                if (
+                    in_array($section->sectionid, $data->excluded) ||
+                    in_array($section->sectionid, $data->readingweek)
+                ) {
                     // If we're adding or updating data.
                     // If the section is to be excluded.
                     if (in_array($section->sectionid, $data->excluded)) {
@@ -150,16 +151,20 @@ class data_manager {
                 }
 
                 // If we're removing data.
-                if (!in_array($section->sectionid, $data->excluded)
-                    && $section->excluded == 1) {
+                if (
+                    !in_array($section->sectionid, $data->excluded)
+                    && $section->excluded == 1
+                ) {
                     $sectionobj->excluded = 0;
                     if (!array_key_exists($section->sectionid, $sectionobjs)) {
                         $sectionobjs[$section->sectionid] = $sectionobj;
                     }
                 }
 
-                if (!in_array($section->sectionid, $data->readingweek)
-                    && $section->readingweek == 1) {
+                if (
+                    !in_array($section->sectionid, $data->readingweek)
+                    && $section->readingweek == 1
+                ) {
                     $sectionobj->readingweek = 0;
                     if (!array_key_exists($section->sectionid, $sectionobjs)) {
                         $sectionobjs[$section->sectionid] = $sectionobj;
@@ -167,8 +172,10 @@ class data_manager {
                 }
 
                 // If the teaching interval is not fortnightly, remove reading week section.
-                if ($data->teachinginverval != teaching_intervals::FORTNIGHTLY &&
-                    $section->readingweek == 1) {
+                if (
+                    $data->teachinginverval != teaching_intervals::FORTNIGHTLY &&
+                    $section->readingweek == 1
+                ) {
                     $sectionobj->readingweek = 0;
                 }
             }
@@ -349,7 +356,8 @@ class data_manager {
             "SELECT tc.*, tt.yearid AS academicyear, tt.id AS term
                FROM {timetableevents_course} tc
                JOIN {timetableevents_term} tt ON tt.id = tc.startingtermid
-              WHERE courseid = ?", [$courseid]
+              WHERE courseid = ?",
+            [$courseid]
         );
 
         $sections = $DB->get_records_sql(
@@ -357,7 +365,8 @@ class data_manager {
                FROM {timetableevents_section} ts
                JOIN {course_sections} cs ON ts.sectionid = cs.id
                JOIN {course} c ON c.id = cs.course
-              WHERE cs.course = ?", [$courseid]
+              WHERE cs.course = ?",
+            [$courseid]
         );
 
         $excluded = [];
@@ -371,9 +380,8 @@ class data_manager {
             if ($section->readingweek == 1) {
                 $readingweek[$section->sectionid] = $section->sectionid;
             }
-
         }
-        $coursedata = $coursedata ?: new stdClass;
+        $coursedata = $coursedata ?: new stdClass();
         $coursedata->excluded = $excluded;
         $coursedata->readingweek = $readingweek;
 
@@ -432,14 +440,18 @@ class data_manager {
      * @param int $grouppreference User's current display group preference.
      * @return array
      */
-    public static function get_events(stdClass $instance, array $daterange,
-                                      stdClass $groupdata, int $grouppreference): array {
+    public static function get_events(
+        stdClass $instance,
+        array $daterange,
+        stdClass $groupdata,
+        int $grouppreference
+    ): array {
         global $DB, $PAGE;
 
         $groupdatacopy = clone($groupdata);
         $eventtype = $groupdatacopy->eventtype;
         unset($groupdatacopy->eventtype);
-        $params = array();
+        $params = [];
         $params['courseid'] = $instance->course;
         $params['eventtype'] = 'group';
 
@@ -543,7 +555,7 @@ class data_manager {
         $groupdata->eventtype = ['group'];
 
         // If group mode is not enabled.
-        if ($groupmode == NOGROUPS ) {
+        if ($groupmode == NOGROUPS) {
             $groupdata->eventtype = ['course'];
         }
 
@@ -552,7 +564,7 @@ class data_manager {
         if (!has_capability('mod/timetableevents:viewall', $context)) {
             $usergroups = groups_get_user_groups($courseid, $USER->id);
             foreach ($allgroups as $group) {
-                $events = data_manager::get_all_group_events($courseid, $group->id);
+                $events = self::get_all_group_events($courseid, $group->id);
                 if (!in_array($group->id, $usergroups[0]) || count($events) == 0) {
                     unset($allgroups[$group->id]);
                 }
@@ -588,25 +600,28 @@ class data_manager {
         global $DB;
 
         $courseconfig = $DB->get_record_sql(
-                 "SELECT tc.*
+            "SELECT tc.*
                     FROM {timetableevents_course} tc
-                   WHERE tc.courseid = ?", [$courseid]
+                   WHERE tc.courseid = ?",
+            [$courseid]
         );
 
         $groups = $DB->get_records_sql(
-                 "SELECT tg.*
+            "SELECT tg.*
                     FROM {timetableevents_course} tc
                     JOIN {groups} g ON g.courseid = tc.courseid
                     JOIN {timetableevents_group} tg on tg.groupid = g.id
-                   WHERE tc.courseid = ?", [$courseid]
+                   WHERE tc.courseid = ?",
+            [$courseid]
         );
 
         $sections = $DB->get_records_sql(
-                "SELECT cs.id AS sectionid, cs.section, ts.id, ts.excluded, ts.readingweek
+            "SELECT cs.id AS sectionid, cs.section, ts.id, ts.excluded, ts.readingweek
                    FROM {course_sections} cs
                    JOIN {course} c ON c.id = cs.course
                    JOIN {timetableevents_section} ts ON ts.sectionid = cs.id
-                  WHERE cs.course = ?", [$courseid]
+                  WHERE cs.course = ?",
+            [$courseid]
         );
 
         $courseconfig->groupoverrides = [];
@@ -678,8 +693,12 @@ class data_manager {
      * @param int|null $group The group ID to calculate the date range for.
      * @return array
      */
-    public static function calculate_date_range(stdClass $cm, stdClass $instance,
-                                                stdClass $courseconfig, int $group = null): array {
+    public static function calculate_date_range(
+        stdClass $cm,
+        stdClass $instance,
+        stdClass $courseconfig,
+        int $group = null
+    ): array {
         global $DB;
         $daterange = [];
 
@@ -709,17 +728,17 @@ class data_manager {
             $previouskey = null;
 
             switch ($courseconfig->teachinginverval) {
-                case teaching_intervals::WEEKLY;
+                case teaching_intervals::WEEKLY:
                     $teachingrange = 1;
                     $unit = 'W';
                     break;
 
-                case teaching_intervals::FORTNIGHTLY;
+                case teaching_intervals::FORTNIGHTLY:
                     $teachingrange = 2;
                     $unit = 'W';
                     break;
 
-                case teaching_intervals::DAILY;
+                case teaching_intervals::DAILY:
                     $teachingrange = 1;
                     $unit = 'D';
                     break;
@@ -748,7 +767,6 @@ class data_manager {
                 }
 
                 foreach ($teachingsections as $teachingsectionkey => $teachingsection) {
-
                     $teachinginterval = 'P' . $teachingrange . $unit;
                     $daterangestart = new \DateTime('now', \core_date::get_server_timezone_object());
                     $daterangeend = new \DateTime('now', \core_date::get_server_timezone_object());
@@ -780,7 +798,8 @@ class data_manager {
                             // If interval is Fortnightly and the section is a reading week, add one week to the end date.
                             if (
                                 array_key_exists($teachingsection->section, $readingweeks)
-                                && $courseconfig->teachinginverval == teaching_intervals::FORTNIGHTLY) {
+                                && $courseconfig->teachinginverval == teaching_intervals::FORTNIGHTLY
+                            ) {
                                 $teachingsections[$teachingsectionkey]->excluded = 0;
                                 $teachingsections[$teachingsectionkey]->readingweek = 1;
                                 $teachinginterval = 'P1W';
@@ -789,7 +808,8 @@ class data_manager {
                             // Otherwise, add the default teaching interval to the end date.
                             if (
                                 !array_key_exists($teachingsection->section, $excluded)
-                                && !array_key_exists($teachingsection->section, $readingweeks)) {
+                                && !array_key_exists($teachingsection->section, $readingweeks)
+                            ) {
                                 $teachingsections[$teachingsectionkey]->excluded = 0;
                                 $teachingsections[$teachingsectionkey]->readingweek = 0;
                             }
@@ -822,7 +842,8 @@ class data_manager {
                             if (array_key_exists($previoustermkey, $terms)) {
                                 if (
                                     $newdaterangestart->getTimestamp() > $previoustermend->getTimestamp()
-                                    && $newdaterangestart->getTimestamp() < $termstart->getTimestamp()) {
+                                    && $newdaterangestart->getTimestamp() < $termstart->getTimestamp()
+                                ) {
                                     // Add difference between term dates.
                                     if ($teachingsections[$teachingsectionkey]->excluded == 0) {
                                         $diff = date_diff($previoustermend, $termstart);
@@ -836,7 +857,6 @@ class data_manager {
 
                         // Make any adjustments required to the end date if we hit the end of a term.
                         foreach ($terms as $termkey => $term) {
-
                             $nexttermkey = $termkey + 1;
 
                             $termend = new \DateTime('now', \core_date::get_server_timezone_object());
@@ -852,7 +872,8 @@ class data_manager {
                             // the start of the next term's start date.
                             if (
                                 $daterangeend->getTimestamp() > $termend->getTimestamp()
-                                && $daterangeend->getTimestamp() < $nexttermstart->getTimestamp()) {
+                                && $daterangeend->getTimestamp() < $nexttermstart->getTimestamp()
+                            ) {
                                 // Set the end date of the section to the end date of the term.
                                 $daterangeend->setTimestamp($term->enddate);
                                 $daterangeend->setTime(23, 59, 59);
@@ -871,7 +892,7 @@ class data_manager {
             $daterange['endtimestamp'] = $daterangeend->getTimestamp();
 
             $daterange['teach'] = date('Y/m/d, H:i', $teachingstartdate->getTimestamp());
-            $daterange['start'] = date('Y/m/d, H:i', $daterangestart->getTimestamp());;
+            $daterange['start'] = date('Y/m/d, H:i', $daterangestart->getTimestamp());
             $daterange['end'] = date('Y/m/d, H:i', $daterangeend->getTimestamp());
             $daterange['course'] = $courseconfig->courseid;
             $daterange['cmid'] = $cm->id;
@@ -879,7 +900,6 @@ class data_manager {
         }
 
         return $daterange;
-
     }
 
     /**
@@ -890,8 +910,11 @@ class data_manager {
      * @param int $group The instance group override ID.
      * @return stdClass
      */
-    public static function get_teaching_startdate_overrides(stdClass $courseconfig, stdClass $instance,
-                                                            int $group): stdClass {
+    public static function get_teaching_startdate_overrides(
+        stdClass $courseconfig,
+        stdClass $instance,
+        int $group
+    ): stdClass {
 
         $data = new stdClass();
         $data->teachingstartdate = $courseconfig->teachingstartdate;
@@ -984,7 +1007,10 @@ class data_manager {
         if (!$newgrouprestriction) {
             // Create a new group restriction.
             $restriction = \core_availability\tree::get_root_json(
-                [\availability_group\condition::get_json($data->groupid)], \core_availability\tree::OP_AND, false);
+                [\availability_group\condition::get_json($data->groupid)],
+                \core_availability\tree::OP_AND,
+                false
+            );
 
             $formavailability->c[] = $restriction->c[0];
             $formavailability->showc[] = false;
@@ -1005,7 +1031,7 @@ class data_manager {
         // If a preference hasn't been set, set the first group as the preference.
         if (!$grouppreference && count($groups) > 0) {
             $grouppreference = key($groups);
-            set_user_preference('mod_timetableevents_' . $courseid , $grouppreference);
+            set_user_preference('mod_timetableevents_' . $courseid, $grouppreference);
         }
         // If the group preference has been set but the user isn't in that group any more,
         // set the group to the first group they are a member of.
@@ -1013,13 +1039,13 @@ class data_manager {
             if (!array_key_exists($grouppreference, $groups)) {
                 $grouppreference = key($groups);
             }
-            set_user_preference('mod_timetableevents_' . $courseid , $grouppreference);
+            set_user_preference('mod_timetableevents_' . $courseid, $grouppreference);
         }
 
         // If the user isn't in any groups, set the preference to 0.
         if (!$grouppreference || count($groups) == 0) {
             $grouppreference = 0;
-            set_user_preference('mod_timetableevents_' . $courseid , 0);
+            set_user_preference('mod_timetableevents_' . $courseid, 0);
         }
 
         return $grouppreference;

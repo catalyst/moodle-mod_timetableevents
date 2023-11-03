@@ -36,7 +36,6 @@ require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class behat_mod_timetableevents extends behat_base {
-
     /**
      * Send events to the mod_timetableevents_import_events web service function.
      *
@@ -48,7 +47,9 @@ class behat_mod_timetableevents extends behat_base {
         require_once($CFG->libdir . '/externallib.php');
         try {
             $args = external_api::validate_parameters(
-                    mod_timetableevents\external\import_events::execute_parameters(), ['events' => $events->getColumnsHash()]);
+                mod_timetableevents\external\import_events::execute_parameters(),
+                ['events' => $events->getColumnsHash()]
+            );
             mod_timetableevents\external\import_events::execute($args['events']);
         } catch (invalid_parameter_exception $e) {
             throw new Exception($e->debuginfo);
@@ -64,5 +65,4 @@ class behat_mod_timetableevents extends behat_base {
         $yearid = $DB->get_field('timetableevents_year', 'id', ['name' => $name]);
         set_config('currentacadyear', $yearid, 'mod_timetableevents');
     }
-
 }

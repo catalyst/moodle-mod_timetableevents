@@ -27,8 +27,8 @@ use mod_timetableevents\data_manager;
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once($CFG->dirroot.'/course/moodleform_mod.php');
-require_once($CFG->dirroot.'/mod/timetableevents/lib.php');
+require_once($CFG->dirroot . '/course/moodleform_mod.php');
+require_once($CFG->dirroot . '/mod/timetableevents/lib.php');
 
 /**
  * Class for the standard module settings page.
@@ -39,7 +39,6 @@ require_once($CFG->dirroot.'/mod/timetableevents/lib.php');
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_timetableevents_mod_form extends moodleform_mod {
-
     /**
      * Form definition.
      */
@@ -60,11 +59,11 @@ class mod_timetableevents_mod_form extends moodleform_mod {
         foreach ($courses as $course) {
             $courseoptions[$course->id] = $course->fullname;
         }
-        $options = array(
+        $options = [
             'multiple' => false,
             'showsuggestions' => true,
             'placeholder' => get_string('modsetting:placeholder', 'timetableevents'),
-        );
+        ];
 
         $mform->addElement('course', 'courseoverride', get_string('modsetting:coursesearch', 'timetableevents'), $options);
         $mform->setDefault('courseoverride', $this->get_course()->id);
@@ -86,14 +85,23 @@ class mod_timetableevents_mod_form extends moodleform_mod {
             $mform->setType('nogroups', PARAM_INT);
         }
 
-        $mform->addElement('select', 'groupid',
-            get_string('modsetting:groupsearch', 'timetableevents'), $groupoptions, $options);
+        $mform->addElement(
+            'select',
+            'groupid',
+            get_string('modsetting:groupsearch', 'timetableevents'),
+            $groupoptions,
+            $options
+        );
         $mform->hideIf('groupid', 'coursedefaults', 'checked');
-        $mform->disabledIf('groupid', 'nogroups', 'eq',  1);
+        $mform->disabledIf('groupid', 'nogroups', 'eq', 1);
         $mform->addHelpButton('groupid', 'modsetting:groupsearch', 'timetableevents');
 
-        $mform->addElement('date_selector', 'startdate',
-            get_string('modsetting:daterange', 'timetableevents'), ['optional' => true]);
+        $mform->addElement(
+            'date_selector',
+            'startdate',
+            get_string('modsetting:daterange', 'timetableevents'),
+            ['optional' => true]
+        );
         $mform->hideIf('startdate', 'coursedefaults', 'checked');
         $mform->addHelpButton('startdate', 'modsetting:daterange', 'timetableevents');
 
@@ -158,13 +166,16 @@ class mod_timetableevents_mod_form extends moodleform_mod {
             } else {
                 // Static elements can only be hidden using hideIf is added to a group.
                 $group = [];
-                $group[] =& $mform->createElement('static', 'groupid', get_string('modsetting:groupsearch', 'timetableevents'),
-                    get_string('modsetting:nogroups', 'timetableevents'));
+                $group[] =& $mform->createElement(
+                    'static',
+                    'groupid',
+                    get_string('modsetting:groupsearch', 'timetableevents'),
+                    get_string('modsetting:nogroups', 'timetableevents')
+                );
                 $mform->addGroup($group, 'groupgroup', '', ' ', false);
                 $mform->hideIf('groupgroup', 'coursedefaults', 'checked');
             }
         }
-
     }
 
     // phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameUnderscore
@@ -198,8 +209,10 @@ class mod_timetableevents_mod_form extends moodleform_mod {
         // If it's a new cm with a group override and the group is in this course,
         // add an initial group availability restriction. Teaching staff can manage any further
         // restriction updates themselves.
-        if (!empty($data->groupid) && $data->coursemodule == 0 &&
-            ($data->courseoverride == null || $data->courseoverride == $data->course)) {
+        if (
+            !empty($data->groupid) && $data->coursemodule == 0 &&
+            ($data->courseoverride == null || $data->courseoverride == $data->course)
+        ) {
             data_manager::update_availability($data);
         }
 

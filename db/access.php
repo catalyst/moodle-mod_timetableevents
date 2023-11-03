@@ -31,15 +31,15 @@ $capabilities = [
     'mod/timetableevents:import' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => []
+        'archetypes' => [],
     ],
     'mod/timetableevents:addinstance' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        ]
+            'manager' => CAP_ALLOW,
+        ],
     ],
     'mod/timetableevents:view' => [
         'captype' => 'read',
@@ -48,8 +48,8 @@ $capabilities = [
             'student' => CAP_ALLOW,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        ]
+            'manager' => CAP_ALLOW,
+        ],
     ],
     'mod/timetableevents:viewall' => [
         'captype' => 'read',
@@ -57,7 +57,7 @@ $capabilities = [
         'archetypes' => [
             'editingteacher' => CAP_ALLOW,
             'coursecreator' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        ]
-    ]
+            'manager' => CAP_ALLOW,
+        ],
+    ],
 ];

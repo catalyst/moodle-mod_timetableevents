@@ -28,12 +28,12 @@ defined('MOODLE_INTERNAL') || die();
 $services = [
     'timetableventsservice' => [
         'functions' => [
-            'mod_timetableevents_import_events'
+            'mod_timetableevents_import_events',
         ],
         'requiredcapability' => 'mod/timetableevents:import',
         'restrictedusers' => 0,
         'enabled' => 1,
-    ]
+    ],
 ];
 
 $functions = [
@@ -43,14 +43,14 @@ $functions = [
         'description' => 'Import new or updated timetable events',
         'type' => 'write',
         'ajax' => false,
-        'capabilities' => 'mod/timetableevents:import'
+        'capabilities' => 'mod/timetableevents:import',
     ],
     'mod_timetableevents_select_groups' => [
         'classname' => 'mod_timetableevents\\external\\get_groups',
-        'methodname' => 'get_groups',
+        'methodname' => 'execute',
         'description' => 'Select groups in a different course',
         'type' => 'read',
         'ajax' => true,
-        'capabilities' => 'mod/timetableevents:addinstance'
-    ]
+        'capabilities' => 'mod/timetableevents:addinstance',
+    ],
 ];
