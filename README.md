@@ -11,6 +11,12 @@ normal events.
 You can find more documentation about the plugin and its usage on the 
 [Wiki](https://github.com/catalyst/moodle-mod_timetableevents/wiki)
 
+## Branches
+| Version       | Branch            |
+|---------------|-------------------|
+| Moodle 4.1    | MOODLE_401_STABLE |
+| Mooodle 4.2+  | main              |
+
 ## Crafted by Catalyst IT
 
 This plugin was developed by [Catalyst IT Europe](https://www.catalyst-eu.net/).
