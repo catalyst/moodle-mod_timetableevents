@@ -8,3 +8,5 @@ jobs:
     uses: catalyst/catalyst-moodle-workflows/.github/workflows/ci.yml@main
     with:
       disable_release: true
+      disable_phpdoc: true # Deprecated warnings and false positives.
+      disable_validate: true # Deprecated warnings.
