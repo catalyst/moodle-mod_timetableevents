@@ -14,12 +14,6 @@ select[name="mod_timetableevents-select-groups"] {
     margin-bottom: 10px;
 }
 
-a[data-title="timetableevents"],
-li.modtype_timetableevents span.inplaceeditable,
-li.modtype_timetableevents img.activityicon {
-    display: none !important;
-}
-
 #page-mod-timetableevents-course #groupoverrides_selections .badge span {
     display: none;
 }
