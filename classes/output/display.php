@@ -72,8 +72,8 @@ class display implements \renderable, \templatable {
         // If the current section is greater or equal to the first teaching section.
         if ($cm->sectionnum >= $courseconfig->firstsection) {
             $this->context['icon'] = $OUTPUT->pix_icon(
-                'course',
-                'theme',
+                'monologo',
+                '', // This is decorative, the name of the plugin is directly adjacent to the logo.
                 'mod_timetableevents',
                 ['class' => 'mod_timetableevents_course_icon']
             );

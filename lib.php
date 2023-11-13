@@ -84,6 +84,7 @@ function timetableevents_delete_instance(int $id): bool {
 
 /**
  * Set the course settings the plugin supports.
+ *
  * @uses FEATURE_IDNUMBER
  * @uses FEATURE_GROUPS
  * @uses FEATURE_GROUPINGS
@@ -91,10 +92,12 @@ function timetableevents_delete_instance(int $id): bool {
  * @uses FEATURE_COMPLETION_TRACKS_VIEWS
  * @uses FEATURE_GRADE_HAS_GRADE
  * @uses FEATURE_GRADE_OUTCOMES
+ * @uses FEATURE_MOD_PURPOSE
+ * @uses MOD_PURPOSE_CONTENT
  * @param string $feature FEATURE_xx constant for requested feature
- * @return bool|null True if module supports feature, false if not, null if doesn't know
+ * @return mixed True if module supports feature, false if not, null if doesn't know or string for the module purpose.
  */
-function timetableevents_supports(string $feature): ?bool {
+function timetableevents_supports(string $feature) {
     switch ($feature) {
         case FEATURE_IDNUMBER:
             return true;
@@ -118,6 +121,8 @@ function timetableevents_supports(string $feature): ?bool {
             return true;
         case FEATURE_NO_VIEW_LINK:
             return true;
+        case FEATURE_MOD_PURPOSE:
+            return MOD_PURPOSE_CONTENT;
 
         default:
             return null;
