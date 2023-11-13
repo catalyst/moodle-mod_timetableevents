@@ -17,14 +17,33 @@
 /**
  * Timetable events view.php
  *
+ * Redirect to the course page section contanting the timetableevents instance.
+ *
  * @package   mod_timetableevents
  * @copyright 2022 onwards Catalyst IT EU {@link https://catalyst-eu.net}
  * @author    Sarah Cotton <sarah.cotton@catalyst-eu.net>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require('../../config.php');
-require_once('lib.php');
-require_login();
-global $DB;
-$id = required_param('id', PARAM_INT);
+require_once(__DIR__ . '/../../config.php');
+
+$id = optional_param('id', 0, PARAM_INT); // Course Module ID.
+
+$PAGE->set_url('/mod/timetableevents/view.php', ['id' => $id]);
+if (!$cm = get_coursemodule_from_id('timetableevents', $id, 0, true)) {
+    throw new \moodle_exception('invalidcoursemodule');
+}
+
+if (!$course = $DB->get_record('course', ['id' => $cm->course])) {
+    throw new \moodle_exception('coursemisconf');
+}
+
+if (!$timetableevents = $DB->get_record('timetableevents', ['id' => $cm->instance])) {
+    throw new \moodle_exception('invalidcoursemodule');
+}
+
+require_login($course, true, $cm);
+
+$url = course_get_url($course, $cm->sectionnum, []);
+$url->set_anchor('module-' . $id);
+redirect($url);
