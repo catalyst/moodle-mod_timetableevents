@@ -38,6 +38,8 @@ $PAGE->set_title($SITE->shortname . ': '  .  get_string('pluginname', 'timetable
 $id = required_param('id', PARAM_INT);
 $delete = optional_param('delete', null, PARAM_INT);
 
+$settingsurl = new moodle_url('/admin/settings.php', ['section' => 'modsettingtimetableevents']);
+
 if (!is_null($delete)) {
     require_sesskey();
     global $DB;
@@ -45,7 +47,7 @@ if (!is_null($delete)) {
     $DB->delete_records_list('timetableevents_term', 'yearid', [$id]);
     $DB->delete_records_list('timetableevents_year', 'id', [$id]);
 
-    redirect(new moodle_url('/admin/settings.php', ['section' => 'modsettingtimetableevents']));
+    redirect($settingsurl);
 } else {
     echo $OUTPUT->header();
     echo $OUTPUT->heading(get_string('pluginsettings:acadyears:edit', 'mod_timetableevents'));
@@ -53,7 +55,7 @@ if (!is_null($delete)) {
 
     $confirmurl = new moodle_url($pageurl, ['id' => $id, 'delete' => $delete]);
 
-    echo $OUTPUT->confirm('Are you sure?', $confirmurl, $pageurl);
+    echo $OUTPUT->confirm(get_string('areyousure', 'moodle'), $confirmurl, $settingsurl);
     echo $OUTPUT->box_end();
     echo $OUTPUT->footer();
 }
