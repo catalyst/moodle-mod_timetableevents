@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 /** @var stdClass $plugin */
 $plugin->component = 'mod_timetableevents';
-$plugin->version = 2023110300;
+$plugin->version = 2023110302;
 $plugin->supported = [401, 401];
 $plugin->maturity = MATURITY_STABLE;
 $plugin->requires = 2022112800;
