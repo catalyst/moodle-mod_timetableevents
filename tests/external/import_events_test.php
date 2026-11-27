@@ -31,7 +31,7 @@ use core_external\external_api;
  * Tests for events import API
  * @covers \mod_timetableevents\external\import_events
  */
-class import_events_test extends \advanced_testcase {
+final class import_events_test extends \advanced_testcase {
     /**
      * @var array Generated entities.
      */
@@ -45,6 +45,7 @@ class import_events_test extends \advanced_testcase {
      */
     public function setUp(): void {
         global $CFG;
+        parent::setUp();
         $this->resetAfterTest();
         $this->setAdminUser();
         // Workaround for external_api::call_external_function requiring sesskey.

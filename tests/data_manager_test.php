@@ -31,12 +31,13 @@ use stdClass;
  *
  * @covers \mod_timetableevents\data_manager
  */
-class data_manager_test extends \advanced_testcase {
+final class data_manager_test extends \advanced_testcase {
     /**
      * Set up the test data.
      */
     public function setUp(): void {
         global $CFG;
+        parent::setUp();
         $this->resetAfterTest();
         $this->setAdminUser();
         // This timezone does not use DST (which would break the tests).
