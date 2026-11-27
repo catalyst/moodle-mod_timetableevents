@@ -133,6 +133,13 @@ class acadyears_settings extends moodleform {
     }
     // phpcs:enable
 
+    /**
+     * Validate that each term ends after it starts and each subsequent term starts after the previous one ends.
+     *
+     * @param array $data Submitted form data.
+     * @param array $files Uploaded files, unused by this form.
+     * @return array Validation messages keyed by field name, or an empty array if valid.
+     */
     public function validation($data, $files) {
         $errors = [];
         foreach ($data['enddate'] as $key => $enddate) {
